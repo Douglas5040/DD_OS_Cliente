@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.69"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="103dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="0.83"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/ic_launcher" />
+
+        <Button
+            android:id="@+id/buttonSwitcImg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Autenticar Serviço" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnConta"
+            android:layout_width="wrap_content"
+            android:layout_height="115dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableTop="@android:drawable/spinner_background"
+            android:drawingCacheQuality="high"
+            android:elevation="0dp"
+            android:paddingTop="10dp"
+            android:pointerIcon="hand"
+            android:text="Conta"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnRefri"
+            android:layout_width="105dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.20"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableTop="@android:drawable/spinner_background"
+            android:drawingCacheQuality="high"
+            android:elevation="0dp"
+            android:paddingTop="10dp"
+            android:pointerIcon="hand"
+            android:text="Refrigeradores"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnServ"
+            android:layout_width="wrap_content"
+            android:layout_height="115dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableTop="@android:drawable/spinner_background"
+            android:drawingCacheQuality="high"
+            android:elevation="0dp"
+            android:paddingTop="10dp"
+            android:pointerIcon="hand"
+            android:text="Serviços"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
