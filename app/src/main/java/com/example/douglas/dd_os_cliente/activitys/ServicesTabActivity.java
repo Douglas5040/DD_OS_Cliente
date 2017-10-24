@@ -108,6 +108,11 @@ public class ServicesTabActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == android.R.id.home) {
+//            Intent i = new Intent(getApplicationContext(), ListServPendenteFragment.class);  //your class
+//            startActivity(i);
+            finish();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -128,6 +133,13 @@ public class ServicesTabActivity extends AppCompatActivity {
         private RadioButton rbCorre;
         private RadioButton rbEnderMy;
         private RadioButton rbEnderOther;
+
+        private EditText editData;
+        private EditText editHora;
+        private EditText editFone1;
+        private EditText  editFone2;
+        private EditText editDEscriProb;
+
         private ListView lvServPen;
         private SQLiteHandler db;
         public static int servPenPosition = 0;
@@ -157,14 +169,23 @@ public class ServicesTabActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 View rootView = inflater.inflate(R.layout.fragment_services_tab1, container, false);
-                fab = (FloatingActionButton) rootView.findViewById(R.id.fabSave);
+                fab = (FloatingActionButton) rootView.findViewById(R.id.fabSolicitarServ);
                 rbPrev = (RadioButton) rootView.findViewById(R.id.rbPreven);
                 rbCorre = (RadioButton) rootView.findViewById(R.id.rbCorre);
                 rbEnderMy = (RadioButton) rootView.findViewById(R.id.rbEnderMy);
                 rbEnderOther = (RadioButton) rootView.findViewById(R.id.rbEnderOther);
+                editData = (EditText) rootView.findViewById(R.id.editData);
+                editHora = (EditText) rootView.findViewById(R.id.editHora);
+                editFone1 = (EditText) rootView.findViewById(R.id.editFone1);
+                editFone2 = (EditText) rootView.findViewById(R.id.editFone2);
+                editDEscriProb = (EditText) rootView.findViewById(R.id.editDescriProb);
+
                 final LinearLayout layoutEnder = (LinearLayout) rootView.findViewById(R.id.layoutEnder);
 
-                fab.setOnClickListener(new View.OnClickListener() {
+                rbCorre.requestFocus();
+
+                fab.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
                     public void onClick(View view) {
                         Snackbar.make(view, "Solicitando Serviço", Snackbar.LENGTH_LONG)
@@ -198,10 +219,17 @@ public class ServicesTabActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         rbEnderOther.setChecked(true);
                         rbEnderMy.setChecked(false);
+
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        addServCli( enviar dados dos campos do XML pelos parametros);
+                    }
+                });
                     if(layoutEnder.getChildAt(1) == null) {
                         EditText etEnder = new EditText(getContext());
                         etEnder.setWidth(container.getWidth());
-                        etEnder.setHint("Digite o Nome e Numero da Rua");
+                        etEnder.setHint("Digite a Rua, e Numero da Casa");
                         etEnder.setTextSize(13);
 
                         layoutEnder.addView(etEnder, 0);
@@ -380,6 +408,82 @@ public class ServicesTabActivity extends AppCompatActivity {
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
         }
+
+        private void addServCli(final Double lati, final Double longi, final int cli, final String ender, final String comple, final String data,
+                                final String hora, final String descriCliPro, final String status, final String tipoManu, final String codRefriCli){
+
+
+                // Tag used to cancel the request
+                String tag_string_req = "req_addServPen";
+
+                StringRequest strReq = new StringRequest(Request.Method.POST,
+                        AppConfig.URL_INSERIR_SERV_PEN_CLI, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Inserindo dados: " + response.toString());
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            boolean error = jObj.getBoolean("error");
+
+                            // Check for error node in json
+                            if (!error) {
+
+                                Log.e(TAG," SERVIÇO INSERIDO COM SUCESSO ");
+
+
+                            } else {
+                                // Error in login. Get the error message
+                                String errorMsg = jObj.getString("error_msg");
+                                Toast.makeText(getContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            // JSON error
+                            e.printStackTrace();
+                            Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                            Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                        // stopping swipe refresh
+                        swipeRefreshLayout.setRefreshing(false);
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "ERROR AO SALVAR SERVIÇO: " + error.getMessage());
+
+                        //hideDialog();
+                    }
+                }) {
+
+                    @Override
+                    protected Map<String, String> getParams() {
+                        // Posting parameters to login url
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("lati", ""+lati);
+                        params.put("longi", ""+longi);
+                        params.put("cli", ""+cli);
+                        params.put("ender", ender);
+                        params.put("comple", comple);
+                        params.put("data", data);
+                        params.put("hora", hora);
+                        params.put("descriCliPro", descriCliPro);
+                        params.put("status", status);
+                        params.put("tipoManu", tipoManu);
+                        params.put("codRefriCli", codRefriCli);
+                        return params;
+                    }
+
+                };
+
+                // Adding request to request queue
+                AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
+        }
+
         @Override
         public void onRefresh() {
 

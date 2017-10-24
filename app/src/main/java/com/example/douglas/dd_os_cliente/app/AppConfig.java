@@ -2,7 +2,7 @@ package com.example.douglas.dd_os_cliente.app;
 
 public class AppConfig {
 	// Server user login url
-	static String constantIP = "192.168.1.5";
+	static String constantIP = "192.168.0.128";
 
 	public static String URL_LOGIN = "http://"+constantIP+"/android_login_api/login.php";
 
@@ -29,6 +29,9 @@ public class AppConfig {
 
     // Server user register url
     public static String URL_INSERIR_PECS = "http://"+constantIP+"/android_login_api/inserirPecs.php";
+
+    // Server user register url
+    public static String URL_INSERIR_SERV_PEN_CLI = "http://"+constantIP+"/android_login_api/inserirServicePen.php";
 
     // Server user register url
     public static String URL_INSERIR_SERVICES = "http://"+constantIP+"/android_login_api/inserirServices.php";

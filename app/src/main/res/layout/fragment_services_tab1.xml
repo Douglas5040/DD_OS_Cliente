@@ -6,6 +6,17 @@
     tools:context="com.example.douglas.dd_os_cliente.activitys.ServicesTab1Fragment">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSolicitarServ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="15dp"
+        app:backgroundTint="#FF03AC9C"
+        app:srcCompat="@drawable/ic_menu_send" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,12 +30,17 @@
             android:paddingBottom="15dp">
 
             <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -64,7 +80,6 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="bottom|center_vertical"
@@ -74,7 +89,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/editData"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -100,7 +115,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="bottom|center_vertical"
@@ -110,7 +124,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/editHora"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -192,7 +206,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
                         android:gravity="bottom"
@@ -203,7 +216,7 @@
                         android:textSize="15sp" />
 
                     <EditText
-                        android:id="@+id/editTextFone1"
+                        android:id="@+id/editFone1"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_weight="1"
@@ -212,7 +225,7 @@
                         android:textSize="16sp" />
 
                     <ImageButton
-                        android:id="@+id/imageButton"
+                        android:id="@+id/imageButtonEditFone1"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:background="@color/cardview_shadow_end_color"
@@ -240,7 +253,7 @@
                         android:textSize="15sp" />
 
                     <EditText
-                        android:id="@+id/editTextFone2"
+                        android:id="@+id/editFone2"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_weight="1"
@@ -250,7 +263,7 @@
                         android:textSize="16sp" />
 
                     <ImageButton
-                        android:id="@+id/imageButton"
+                        android:id="@+id/imageButtonEditFone2"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
@@ -277,7 +290,7 @@
                     android:textSize="16sp" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/spinnerRefri"
                     style="@android:style/Widget.Material.Spinner.Underlined"
                     android:layout_width="match_parent"
                     android:layout_height="42dp" />
@@ -287,6 +300,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:paddingBottom="20dp">
@@ -301,9 +315,10 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/editText3"
+                    android:id="@+id/editDescriProb"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Descreva os possiveis problemas ocorridos"
@@ -314,15 +329,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginBottom="65dp"
-        android:layout_marginRight="15dp"
-        app:backgroundTint="#FF03AC9C"
-        app:srcCompat="@drawable/ic_menu_send" />
 
 </FrameLayout>
