@@ -1,33 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingRight="-9dp"
-    tools:ignore="RtlHardcoded,RtlSymmetry">
+    tools:context="com.example.douglas.dd_os_cliente.activitys.RefrigeradorTabActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_edit_ar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="8dp"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:subtitleTextColor="@color/colorAccent"
-        app:titleTextColor="@color/colorAccent" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="15dp"
+        app:backgroundTint="#FF03AC9C"
+        app:srcCompat="@drawable/content_save_settings" />
 
     <ScrollView
+        android:id="@+id/scroll_refri"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tb_edit_ar"
-        android:layout_marginBottom="60dp"
-        android:paddingRight="5dp">
+        android:paddingRight="5dp"
+        tools:ignore="RtlSymmetry">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="Tem Exaustor?  "
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <CheckBox
@@ -79,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text="Tem Controle?  "
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <CheckBox
@@ -109,7 +102,7 @@
                     android:paddingRight="5dp"
                     android:text="Marca:"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -137,7 +130,7 @@
                     android:paddingRight="5dp"
                     android:text="Modelo:"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -161,9 +154,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="Capacidade Termica (BTU):"
+                    android:text="Capacidade (BTUs):"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -189,7 +182,7 @@
                     android:paddingRight="10dp"
                     android:text="Tensão (tomada)"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -215,7 +208,7 @@
                     android:paddingRight="10dp"
                     android:text="Nível Econômico:"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -240,7 +233,7 @@
                     android:paddingRight="10dp"
                     android:text="Tamanho (LxA):"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -254,7 +247,7 @@
                     android:inputType="textPersonName"
                     android:nextFocusDown="@+id/inc_tb_botton_edit_ar"
                     android:selectAllOnFocus="true"
-                    android:textSize="22sp" />
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
@@ -271,7 +264,7 @@
                     android:paddingRight="10dp"
                     android:text="Tempo de Uso:"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -280,12 +273,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:focusableInTouchMode="true"
-                    android:hint="Tempo de Uso Ar-condicionado"
+                    android:hint="Meses"
                     android:inputType="textPersonName"
                     android:nextFocusDown="@+id/inc_tb_botton_edit_ar"
                     android:selectAllOnFocus="true"
-                    android:textSize="22sp" />
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
@@ -304,7 +296,7 @@
                     android:layout_weight="10.09"
                     android:text="Foto 1 (toque na foto para editar):"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageButton
@@ -314,7 +306,6 @@
                     android:layout_weight="10.09"
                     android:adjustViewBounds="false"
                     android:background="@android:drawable/spinner_background"
-                    android:foreground="@drawable/camera_enhance"
                     android:paddingRight="15dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/camera_enhance" />
@@ -336,7 +327,7 @@
                     android:layout_weight="10.09"
                     android:text="Foto 2 (toque na foto para editar):"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageButton
@@ -346,7 +337,6 @@
                     android:layout_weight="10.09"
                     android:adjustViewBounds="false"
                     android:background="@android:drawable/spinner_background"
-                    android:foreground="@drawable/camera"
                     android:foregroundGravity="center"
                     android:paddingRight="15dp"
                     android:scaleType="fitCenter"
@@ -368,7 +358,7 @@
                     android:layout_weight="10.09"
                     android:text="Foto 3 (toque na foto para editar):"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageButton
@@ -378,7 +368,6 @@
                     android:layout_weight="10.09"
                     android:adjustViewBounds="false"
                     android:background="@android:drawable/spinner_background"
-                    android:foreground="@drawable/camera"
                     android:paddingRight="15dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/camera_enhance" />
@@ -387,7 +376,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <include
-        android:id="@+id/inc_tb_botton_edit_ar"
-        layout="@layout/toolbar_botton"/>
-</RelativeLayout>
+</FrameLayout>

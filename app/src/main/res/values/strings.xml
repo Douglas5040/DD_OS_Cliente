@@ -4,7 +4,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="title_activity_local_serv">Map</string>
-    <string name="hint_login">CPF ou Email</string>
+    <string name="hint_login">CPF/CNPJ ou Email</string>
     <string name="hint_email">Email</string>
     <string name="hint_cpf">CPF</string>
     <string name="hint_cnpj">CNPJ</string>
@@ -75,5 +75,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_services_cli">ServicesCliActivity</string>
     <string name="title_activity_refrigeradores_tab">RefrigeradoresTabActivity</string>
+    <string name="title_activity_refrigerador_tab">RefrigeradorTabActivity</string>
 </resources>
 

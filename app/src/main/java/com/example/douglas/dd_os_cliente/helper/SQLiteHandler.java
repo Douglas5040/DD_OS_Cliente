@@ -28,7 +28,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
-	private static final int DATABASE_VERSION = 49;
+	private static final int DATABASE_VERSION = 52;
 
 	// Database Name
 	private static final String DATABASE_NAME = "android_api";
@@ -107,6 +107,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	private static final String KEY_CPF_CNPJ = "cpf_cnpj";
 	private static final String KEY_UID = "uid";
 	private static final String KEY_CREATED_AT = "created_at";
+	private static final String KEY_UPDATE_AT = "update_at";
 	private static final String KEY_TIPO_CAD = "tipo_cad";
 	private static final String KEY_FONE = "fone1";
 	private static final String KEY_CELL = "fone2";
@@ -205,6 +206,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 					+ KEY_TEMP_USO + " DOUBLE,"
 					+ KEY_NIVEL_ECON + " INT,"
 					+ KEY_TAMANHO + " VARCHAR(10),"
+					+ KEY_LOTACIONAMENTO + " VARCHAR(25),"
 					+ KEY_FOTO1 + " longblob,"
 					+ KEY_FOTO2 + " longblob,"
 					+ KEY_FOTO3 + " longblob,"
@@ -224,6 +226,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 					+ KEY_BAIRRO + " TEXT,"
 					+ KEY_POINT_REF+ " TEXT,"
 					+ KEY_CEP_CLI+ " INT,"
+					+ KEY_UPDATE_AT+ " TEXT,"
 					+ KEY_CREATED_AT + " TEXT" + ");";
 
 	String CREATE_TABLE_OS =
@@ -413,6 +416,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
+		values.put(KEY_ID, user.getId()); // Name
 		values.put(KEY_NAME, user.getName()); // Name
 		values.put(KEY_CPF_CNPJ, user.getCpf_cnpj()); // matricula
 		values.put(KEY_EMAIL, user.getEmail()); // Email
@@ -483,6 +487,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 			else values.put(KEY_ID_REFRI, refrigera.getId_refri());
 			values.put(KEY_PESO_AR, refrigera.getPeso()); // matricula
 			values.put(KEY_HAS_CONTROL, refrigera.getHas_control()); // Email
+			values.put(KEY_LOTACIONAMENTO, refrigera.getHas_control()); // Email
 			values.put(KEY_HAS_EXAUSTOR, refrigera.getHas_exaustor()); // UID
 			values.put(KEY_SAIDA_DE_AR, refrigera.getSaida_ar()); // Name
 			values.put(KEY_CAPACIDADE_TERMI, refrigera.getCapaci_termica()); // matricula
@@ -905,10 +910,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 				objetoAr.setTemp_uso(cursor.getInt(10));
 				objetoAr.setNivel_econo(cursor.getInt(11));
 				objetoAr.setTamanho(cursor.getString(12));
-				objetoAr.setFoto1(cursor.getBlob(13));
-				objetoAr.setFoto2(cursor.getBlob(14));
-				objetoAr.setFoto3(cursor.getBlob(15));
-				objetoAr.setId_cliente(cursor.getInt(16));
+				objetoAr.setLotacionamento(cursor.getString(13));
+				objetoAr.setFoto1(cursor.getBlob(14));
+				objetoAr.setFoto2(cursor.getBlob(15));
+				objetoAr.setFoto3(cursor.getBlob(16));
+				objetoAr.setId_cliente(cursor.getInt(17));
 
 			}
 			//Log.e("CEP : ","----- "+cursor.getString(7));
@@ -923,6 +929,60 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 			return null;
 		}
 	}
+
+	public List<RefrigeradorCtrl> getAllArCli() {
+
+
+		List<RefrigeradorCtrl> listObjetoAr = new ArrayList<RefrigeradorCtrl>();
+		try {
+
+			String selectQuery = "SELECT  * FROM " + TABLE_AR_CLIENTE;
+
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor cursor = db.rawQuery(selectQuery, null);
+			Log.e("Retorno Ar Cliente: ","Tamanho: >>>>><<<<> "+cursor.getCount());
+
+			// Move to first row
+
+			if(cursor.moveToNext()){
+				RefrigeradorCtrl objetoAr = new RefrigeradorCtrl();
+
+				objetoAr.setId_refri(cursor.getInt(0));
+				objetoAr.setPeso(cursor.getInt(1));
+				objetoAr.setHas_control(cursor.getInt(2));
+				objetoAr.setHas_exaustor(cursor.getInt(3));
+				objetoAr.setSaida_ar(cursor.getString(4));
+				objetoAr.setCapaci_termica(cursor.getInt(5));
+				objetoAr.setTencao_tomada(cursor.getInt(6));
+				objetoAr.setHas_timer(cursor.getInt(7));
+				objetoAr.setTipo_modelo(cursor.getInt(8));
+				objetoAr.setMarca(cursor.getInt(9));
+				objetoAr.setTemp_uso(cursor.getInt(10));
+				objetoAr.setNivel_econo(cursor.getInt(11));
+				objetoAr.setTamanho(cursor.getString(12));
+				objetoAr.setLotacionamento(cursor.getString(13));
+				objetoAr.setFoto1(cursor.getBlob(14));
+				objetoAr.setFoto2(cursor.getBlob(15));
+				objetoAr.setFoto3(cursor.getBlob(16));
+				objetoAr.setId_cliente(cursor.getInt(17));
+
+				listObjetoAr.add(objetoAr);
+				Log.e(TAG,"Ar Adicionado: "+objetoAr.toString());
+			}else{
+				RefrigeradorCtrl objetoAr = new RefrigeradorCtrl();
+				listObjetoAr.add(objetoAr);
+			}
+			cursor.close();
+			db.close();
+			// return user
+			return listObjetoAr;
+
+		}catch (Exception e){
+			Log.e("Erro Consulta: "," erro no retorno "+e);
+			return listObjetoAr;
+		}
+	}
+
 
 	public String[] getDadosOScache(int idCli) {
 

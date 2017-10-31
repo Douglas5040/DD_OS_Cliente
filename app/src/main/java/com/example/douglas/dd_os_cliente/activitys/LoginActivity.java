@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -125,12 +126,12 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response.toString());
+                Log.e(TAG, "Login Response: " + response.toString());
 
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-
+                    Log.e(TAG, "Login entrou ----------------: ");
                     // Check for error node in json
                     if (!error) {
                         // user successfully logged in
@@ -142,47 +143,49 @@ public class LoginActivity extends Activity {
 
                         JSONObject user = jObj.getJSONObject("user");
 
+                        userCli.setId(user.getInt("id_cli"));
                         userCli.setName(user.getString("name"));
-                        String matricula = user.getString("matricula");
-                        String email = user.getString("email");
-                        String created_at = user.getString("created_at");
+                        userCli.setCpf_cnpj(user.getInt("cpf_cnpj"));
+                        userCli.setEmail(user.getString("email"));
+                        userCli.setEnder(user.getString("ender"));
+                        userCli.setBairro(user.getString("bairro"));
+                        userCli.setPoint_ref(user.getString("ponto_referencia"));
+                        userCli.setCep(user.getInt("cep"));
+                        userCli.setFone1(user.getString("celular"));
+                        userCli.setFone2(user.getString("fone_fixo"));
+                        userCli.setTipo_cad(user.getString("tipo"));
+                        userCli.setCreated_at(user.getString("created_at"));
+                        userCli.setUpdate_at(user.getString("updated_at"));
 
 
                         // Inserting row in users table
                         db.deleteUsers();
-//                        db.addUser(name, matricula, email, uid, created_at);
-//
-//
-//                        //FECHAR DIALOGO DE ESPERA
-//                        hideDialog();
-//                        //Teste dados tabela sqlite ServPen
-//                        //db.addServPen( -3.018481,-59.997988, 1, "sala","Rua Humaitá, 28, Terra nova, 69093078","proximo Mercadinho Surpresa", "27-12-2017", "18:00;00",
-//                        //        "não gela só ventila, pinga muito, ta muito calor",  "falta de gás, muita sujeira acumulada", "de parede, quadrado, marca: springer, 110v",  "pendente");
-//                        System.out.println("saida: "+name +"  | "+matricula+"  | "+email);
-//                        System.out.println("saida: "+name +"  | "+matricula+"  | "+email);
-//                        Toast.makeText(getApplicationContext(),
-//                                "saida: "+name +"  | "+matricula+"  | "+email, Toast.LENGTH_LONG).show();
-//
-//                        Log.e(TAG, "Login Error: saida: "+ name +"  | "+matricula+"  | "+email);
+                        db.addUser(userCli);
 
+                        pDialog.setMessage("Sincronizando Dados...");
+                        listaPecs();
+                        listaMarcas();
+                        listaModelos();
+                        listaBtus();
+                        listaNvEcon();
+                        listaTencao();
 
-                        // Launch main activity
-                        //System.out.println("teste......");
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
-                        startActivity(intent);
-                        //System.out.println("teste111......");
-                        finish();
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
+                        Log.e(TAG, "Login erro: "+errorMsg);
+
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
+                        hideDialog();
                     }
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
+                    Log.e(TAG, "Login erro: "+e);
+                    Log.e(TAG, "Login erro: "+e.getMessage());
                     Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    hideDialog();
                 }
 
             }
@@ -202,7 +205,7 @@ public class LoginActivity extends Activity {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("email", login);
-                params.put("matricula", login);
+                params.put("cpf_cnpj", login);
                 params.put("password", password);
 
                 return params;
@@ -214,6 +217,460 @@ public class LoginActivity extends Activity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+
+
+    private void listaPecs() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listaPecs";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_PECS, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        JSONArray pecsArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE","ENTROU: "+pecsArray.length());
+                        db = new SQLiteHandler(getApplicationContext());
+                        db.deletePecs();
+                        for (int i = 0; i < pecsArray.length(); i++) {
+                            try {
+                                JSONObject serv_penObj = new JSONObject(pecsArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                PecsCtrl objetoPecs = new PecsCtrl();
+
+                                objetoPecs.setId_pc(serv_penObj.getInt("id_pc"));
+                                objetoPecs.setNome(serv_penObj.getString("nome"));
+                                objetoPecs.setModelo(serv_penObj.getString("modelo"));
+                                objetoPecs.setMarca(serv_penObj.getString("marca"));
+
+                                db.addPecs(objetoPecs);
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Sem Peças no Banco", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void listaMarcas() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listMARCAS";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_MARCA_AR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        JSONArray marcasArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE","ENTROU MARCAS: "+marcasArray.length());
+                        db = new SQLiteHandler(getApplicationContext());
+                        db.deleteMarcas();
+                        for (int i = 0; i < marcasArray.length(); i++) {
+                            try {
+                                JSONObject marcaObj = new JSONObject(marcasArray.get(i).toString());
+
+                                Log.e("Maca encontrada: ", "Entrou no for da Marca");
+
+                                db.addMarca(marcaObj.getInt("id_marca"), marcaObj.getString("marca"));
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Sem Marcas no Banco", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void listaModelos() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listModelo";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_MODELO_AR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        JSONArray modeloArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE","ENTROU: "+modeloArray.length());
+                        db = new SQLiteHandler(getApplicationContext());
+                        db.deleteModelos();
+                        for (int i = 0; i < modeloArray.length(); i++) {
+                            try {
+                                JSONObject modeloObj = new JSONObject(modeloArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                db.addModelo(modeloObj.getInt("id_modelo"), modeloObj.getString("modelo"));
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Sem Modelos no Banco", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void listaBtus() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listBTUs";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_BTUS_AR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        JSONArray btusArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE","ENTROU: "+btusArray.length());
+                        db = new SQLiteHandler(getApplicationContext());
+                        db.deleteBTU();
+                        for (int i = 0; i < btusArray.length(); i++) {
+                            try {
+                                JSONObject btuObj = new JSONObject(btusArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                db.addBtu(btuObj.getInt("id_capaci_termi"), btuObj.getString("capaci_termica"));
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Sem BTUs no Banco", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void listaNvEcon() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listNvEcon";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_NV_ECON_AR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        JSONArray nvEconArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE","ENTROU: "+nvEconArray.length());
+                        db = new SQLiteHandler(getApplicationContext());
+                        db.deleteNvEcon();
+                        for (int i = 0; i < nvEconArray.length(); i++) {
+                            try {
+                                JSONObject nvEconObj = new JSONObject(nvEconArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                db.addNvEcon(nvEconObj.getInt("id_nv_econ"), nvEconObj.getString("nivel_econo"));
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Sem Marcas no Banco", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void listaTencao() {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listTencao";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_TENCAO_AR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+
+                        JSONArray tencaoArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE","ENTROU: "+tencaoArray.length());
+                        db = new SQLiteHandler(getApplicationContext());
+                        db.deleteTencao();
+                        for (int i = 0; i < tencaoArray.length(); i++) {
+                            try {
+                                JSONObject tencaoObj = new JSONObject(tencaoArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                db.addTencaoTomada(tencaoObj.getInt("id_tensao"), tencaoObj.getString("tencao_tomada"));
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+                        hideDialog();
+                        // Launch main activity
+                        //System.out.println("teste......");
+                        Intent intent = new Intent(LoginActivity.this,
+                                MainActivity.class);
+                        startActivity(intent);
+                        //System.out.println("teste111......");
+                        finish();
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Sem Marcas no Banco", Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
 
 
     private void showDialog() {

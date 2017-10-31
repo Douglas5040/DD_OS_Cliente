@@ -1,6 +1,7 @@
 package com.example.douglas.dd_os_cliente.controler;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by Douglas on 06/07/2017.
@@ -22,6 +23,7 @@ public class RefrigeradorCtrl implements Serializable {
     private double temp_uso;
     private int nivel_econo;
     private String tamanho;
+    private String lotacionamento;
     private byte[] foto1;
     private byte[] foto2;
     private byte[] foto3;
@@ -29,7 +31,7 @@ public class RefrigeradorCtrl implements Serializable {
 
     public RefrigeradorCtrl(){}
     public RefrigeradorCtrl(int id_refri, int peso, int has_control, int has_exaustor, String saida_ar, int capaci_termica, int tencao_tomada, int id_cliente,
-                            int has_timer, int tipo_modelo, int marca, double temp_uso, int nivel_econo, String tamanho, byte[] foto1, byte[] foto2, byte[] foto3){
+                            int has_timer, int tipo_modelo, int marca, double temp_uso, int nivel_econo, String tamanho, String lotacionamento, byte[] foto1, byte[] foto2, byte[] foto3){
         this.id_refri = id_refri;
         this.peso = peso;
         this.has_control = has_control;
@@ -43,10 +45,19 @@ public class RefrigeradorCtrl implements Serializable {
         this.temp_uso = temp_uso;
         this.nivel_econo = nivel_econo;
         this.tamanho = tamanho;
+        this.lotacionamento = lotacionamento;
         this.foto1 = foto1;
         this.foto2 = foto2;
         this.foto3 = foto3;
         this.id_cliente = id_cliente;
+    }
+
+    public String getLotacionamento() {
+        return lotacionamento;
+    }
+
+    public void setLotacionamento(String lotacionamento) {
+        this.lotacionamento = lotacionamento;
     }
 
     public int getId_refri() {
@@ -183,5 +194,29 @@ public class RefrigeradorCtrl implements Serializable {
 
     public void setId_cliente(int id_cliente) {
         this.id_cliente = id_cliente;
+    }
+
+    @Override
+    public String toString() {
+        return "RefrigeradorCtrl{" +
+                "id_refri=" + id_refri +
+                ", peso=" + peso +
+                ", has_control=" + has_control +
+                ", has_exaustor=" + has_exaustor +
+                ", saida_ar='" + saida_ar + '\'' +
+                ", capaci_termica=" + capaci_termica +
+                ", tencao_tomada=" + tencao_tomada +
+                ", has_timer=" + has_timer +
+                ", tipo_modelo=" + tipo_modelo +
+                ", marca=" + marca +
+                ", temp_uso=" + temp_uso +
+                ", nivel_econo=" + nivel_econo +
+                ", tamanho='" + tamanho  +
+                ", lotacionamento='" + lotacionamento + '\'' +
+                ", foto1=" + Arrays.toString(foto1) +
+                ", foto2=" + Arrays.toString(foto2) +
+                ", foto3=" + Arrays.toString(foto3) +
+                ", id_cliente=" + id_cliente +
+                '}';
     }
 }

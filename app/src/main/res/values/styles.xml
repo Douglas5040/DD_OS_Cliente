@@ -5,24 +5,27 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ErrorText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar"
-        theme="@style/Theme.AppCompat.Light.NoActionBar">
+        theme="@style/Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">#000</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>
@@ -50,12 +53,11 @@
         <item name="android:dropDownSelector">@android:color/white</item>
     </style>
 
-    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
-
-    </style>
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem"/>
 
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
 
     </style>
+
 
 </resources>

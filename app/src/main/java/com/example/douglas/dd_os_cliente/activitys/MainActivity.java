@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity  {
         btnRefri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,RefrigeradorActivity.class));
+                startActivity(new Intent(MainActivity.this,RefrigeradorTabActivity.class));
             }
         });
         ;

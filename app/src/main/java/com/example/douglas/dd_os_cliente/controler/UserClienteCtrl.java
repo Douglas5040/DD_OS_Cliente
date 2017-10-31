@@ -22,24 +22,34 @@ public class UserClienteCtrl implements Serializable {
     private String point_ref;
     private int cep;
     private String created_at;
+    private String update_at;
 
     public UserClienteCtrl() {
     }
 
     public UserClienteCtrl(int id, String name, String email, int cpf_cnpj, String uid, String created_at, String fone1, String fone2,
-                           String ender, String bairro, String point_ref, int cep) {
+                           String ender, String bairro, String point_ref, int cep, String update_at) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.cpf_cnpj = cpf_cnpj;
         this.uid = uid;
         this.created_at = created_at;
+        this.update_at = update_at;
         this.fone1 = fone1;
         this.fone2 = fone2;
         this.ender = ender;
         this.bairro = bairro;
         this.point_ref = point_ref;
         this.cep = cep;
+    }
+
+    public String getUpdate_at() {
+        return update_at;
+    }
+
+    public void setUpdate_at(String update_at) {
+        this.update_at = update_at;
     }
 
     public int getId() {
