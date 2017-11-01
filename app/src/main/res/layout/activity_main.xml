@@ -24,13 +24,17 @@
             android:layout_marginRight="8dp"
             android:layout_weight="0.83"
             android:adjustViewBounds="true"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/refrigera_main" />
 
         <Button
             android:id="@+id/buttonSwitcImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Autenticar Serviço" />
+            android:layout_weight="0.08"
+            android:background="@android:drawable/alert_dark_frame"
+            android:text="Autenticar Serviço"
+            android:textColor="@color/white"
+            android:textColorLink="@color/card_background" />
 
     </LinearLayout>
 
@@ -61,7 +65,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.20"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@android:drawable/spinner_background"
+            android:drawableTop="@android:drawable/alert_dark_frame"
             android:drawingCacheQuality="high"
             android:elevation="0dp"
             android:paddingTop="10dp"

@@ -19,6 +19,7 @@
         android:id="@+id/scroll_refri"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="60dp"
         android:paddingRight="5dp"
         tools:ignore="RtlSymmetry">
 
@@ -279,98 +280,6 @@
                     android:selectAllOnFocus="true"
                     android:textSize="17sp" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10.09"
-                    android:text="Foto 1 (toque na foto para editar):"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/imgBtnFoto1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10.09"
-                    android:adjustViewBounds="false"
-                    android:background="@android:drawable/spinner_background"
-                    android:paddingRight="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/camera_enhance" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10.09"
-                    android:text="Foto 2 (toque na foto para editar):"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/imgBtnFoto2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10.09"
-                    android:adjustViewBounds="false"
-                    android:background="@android:drawable/spinner_background"
-                    android:foregroundGravity="center"
-                    android:paddingRight="15dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/camera_enhance" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10.09"
-                    android:text="Foto 3 (toque na foto para editar):"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/imgBtnFoto3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10.09"
-                    android:adjustViewBounds="false"
-                    android:background="@android:drawable/spinner_background"
-                    android:paddingRight="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/camera_enhance" />
             </LinearLayout>
 
         </LinearLayout>
