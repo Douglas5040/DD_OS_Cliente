@@ -38,6 +38,8 @@
 
 
     <string name="action_realizar">Realizar Serviço</string>
+    <string name="action_edit_conta">EDITAR</string>
+    <string name="action_salvar_conta">SALVAR</string>
 
     <string name="action_salvar_ar">Salvar Dados</string>
 

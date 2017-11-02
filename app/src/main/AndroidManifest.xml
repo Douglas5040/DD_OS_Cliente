@@ -31,7 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.ContaActivity" />
+        <activity android:name=".activitys.ContaActivity"
+            android:parentActivityName=".activitys.MainActivity">
+        </activity>
         <activity android:name=".activitys.RefrigeradorActivity" />
         <activity
             android:name=".activitys.Main2Activity"

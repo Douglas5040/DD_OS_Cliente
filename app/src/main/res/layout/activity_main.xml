@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="10dp"
     android:weightSum="1">
 
     <LinearLayout
@@ -18,20 +18,23 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="103dp"
+            android:layout_height="304dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_weight="0.83"
             android:adjustViewBounds="true"
-            android:src="@drawable/refrigera_main" />
+            android:background="@drawable/main_efrigerador" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp" />
 
         <Button
             android:id="@+id/buttonSwitcImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.08"
+            android:layout_margin="10dp"
+            android:layout_weight="0.46"
             android:background="@android:drawable/alert_dark_frame"
+            android:padding="15dp"
             android:text="Autenticar Serviço"
             android:textColor="@color/white"
             android:textColorLink="@color/card_background" />
@@ -50,7 +53,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@android:drawable/spinner_background"
+            android:drawableTop="@drawable/conta"
             android:drawingCacheQuality="high"
             android:elevation="0dp"
             android:paddingTop="10dp"
@@ -65,10 +68,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1.20"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@android:drawable/alert_dark_frame"
+            android:drawableTop="@drawable/icone_refri_preto"
             android:drawingCacheQuality="high"
             android:elevation="0dp"
-            android:paddingTop="10dp"
+            android:paddingTop="25dp"
             android:pointerIcon="hand"
             android:text="Refrigeradores"
             android:textAppearance="@style/TextAppearance.AppCompat"
@@ -81,7 +84,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTop="@android:drawable/spinner_background"
+            android:drawableTop="@drawable/icon_service"
             android:drawingCacheQuality="high"
             android:elevation="0dp"
             android:paddingTop="10dp"

@@ -682,7 +682,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		// Move to first row
 		cursor.moveToFirst();
 		if (cursor.getCount() > 0) {
-			user.setId(Integer.parseInt(cursor.getString(0)));
+			user.setId(cursor.getInt(0));
 			user.setName( cursor.getString(1));
 			user.setCpf_cnpj(Integer.parseInt(cursor.getString(2)));
 			user.setEmail(cursor.getString(3));
@@ -1236,6 +1236,33 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 		db.update(TABLE_MY_SERV_PEN,valores,where,null);
 		db.close();
+	}
+
+	public void updateUserCli(UserClienteCtrl userCli){
+		ContentValues valores;
+		String where;
+		try {
+			SQLiteDatabase db = this.getWritableDatabase();
+
+			//where = KEY_ID_SERV_PEN + "=" + id_serv_pen;
+
+			valores = new ContentValues();
+			valores.put(KEY_NAME, userCli.getName());
+			valores.put(KEY_CPF_CNPJ, userCli.getCpf_cnpj());
+			valores.put(KEY_EMAIL, userCli.getEmail());
+			valores.put(KEY_TIPO_CAD, userCli.getTipo_cad());
+			valores.put(KEY_FONE, userCli.getFone2());
+			valores.put(KEY_CELL, userCli.getFone1());
+			valores.put(KEY_ENDER_CLI, userCli.getEnder());
+			valores.put(KEY_BAIRRO, userCli.getBairro());
+			valores.put(KEY_POINT_REF, userCli.getPoint_ref());
+			valores.put(KEY_CEP_CLI, userCli.getCep());
+
+			db.update(TABLE_USER_CLI, valores, null, null);
+			db.close();
+		}catch (Exception e){
+			Log.e(TAG," Erro ao atualizar: "+e);
+		}
 	}
 
 	public void deleteUsers() {
