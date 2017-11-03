@@ -13,7 +13,7 @@
         android:layout_marginBottom="0dp">
 
         <ListView
-            android:id="@+id/lvServiceSilicit"
+            android:id="@+id/lvListRefrigerador"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tb_list_serv"

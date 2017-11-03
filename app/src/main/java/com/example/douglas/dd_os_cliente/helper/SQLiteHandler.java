@@ -28,7 +28,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
-	private static final int DATABASE_VERSION = 52;
+	private static final int DATABASE_VERSION = 53;
 
 	// Database Name
 	private static final String DATABASE_NAME = "android_api";
@@ -1035,7 +1035,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public String getNomeMaca(int id) {
 
         String marca;
-       String selectQuery = "SELECT "+KEY_NAME_MARCA_AR+" FROM " + TABLE_MARCA +" WHERE "+KEY_ID_MARCA_AR+" = "+id;
+        String selectQuery = "SELECT "+KEY_NAME_MARCA_AR+" FROM " + TABLE_MARCA +" WHERE "+KEY_ID_MARCA_AR+" = "+id;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -1045,11 +1045,31 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         marca = cursor.getString(0);
 
-            Log.e(TAG, "NOme Marca: " + cursor.getString(0));
+        Log.e(TAG, "NOme Marca: " + cursor.getString(0));
 
         cursor.close();
         db.close();
         return marca;
+    }
+
+    public String getNomeModelo(int id) {
+
+        String modelo;
+        String selectQuery = "SELECT "+KEY_NOME_MODELO_AR+" FROM " + TABLE_MODELO +" WHERE "+KEY_ID_MODELO_AR+" = "+id;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        Log.e("Tamanho BD Marca: ",""+cursor.getCount());
+        // Move to first row
+        cursor.moveToFirst();
+
+        modelo = cursor.getString(0);
+
+        Log.e(TAG, "NOme Marca: " + cursor.getString(0));
+
+        cursor.close();
+        db.close();
+        return modelo;
     }
 
     public ArrayList<String> getModelo() {

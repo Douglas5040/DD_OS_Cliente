@@ -183,6 +183,8 @@ public class ServicesTabActivity extends AppCompatActivity {
         private ListView lvServPen;
         public static int servPenPosition = 0;
         public static int servPenPositionList = 0;
+        public static ServPendenteCtrl servMyPen;
+
         public List<ServPendenteCtrl> servPens;
         public ServPendenteCtrl servPen;
         private SwipeRefreshLayout swipeRefreshLayout;
@@ -256,7 +258,7 @@ public class ServicesTabActivity extends AppCompatActivity {
 
                 spinnerArCli = (Spinner) rootView.findViewById(R.id.spinnerRefri);
 
-
+                db = new SQLiteHandler(getContext());
 
                 try {
                     listRefrigeradoresCli = db.getAllArCli();
@@ -396,6 +398,11 @@ public class ServicesTabActivity extends AppCompatActivity {
                             etCep.setInputType(4);
                             layoutEnder.addView(etCep, 0);
 
+                            etBairo.setWidth(container.getWidth());
+                            etBairo.setHint("Digite o Nome do Bairro");
+                            etBairo.setTextSize(13);
+                            layoutEnder.addView(etBairo, 1);
+
                             LinearLayout layoutHorion = new LinearLayout(getContext());
                             layoutHorion.setOrientation(LinearLayout.HORIZONTAL);
                             layoutEnder.addView(layoutHorion, 2);
@@ -415,16 +422,10 @@ public class ServicesTabActivity extends AppCompatActivity {
                             layoutHorion.addView(etNum, 1);
 
 
-                            etBairo.setWidth(container.getWidth());
-                            etBairo.setHint("Digite o Nome do Bairro");
-                            etBairo.setTextSize(13);
-                            layoutEnder.addView(etBairo, 1);
-
-
                             etComplemento.setWidth(container.getWidth());
                             etComplemento.setHint("Digite uma Referencia");
                             etComplemento.setTextSize(13);
-                            layoutEnder.addView(etBairo, 3);
+                            layoutEnder.addView(etComplemento, 3);
 
                             etCep.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                                 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -453,38 +454,46 @@ public class ServicesTabActivity extends AppCompatActivity {
 
 
                 return rootView;
+            //TAB lista Serviços Solicitados
             } else {
+
                 View rootView = inflater.inflate(R.layout.fragment_services_tab2, container, false);
 
-//                swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-//                lvServPen = (ListView) rootView.findViewById(R.id.lvServiceSilicit);
-//
-//                db = new SQLiteHandler(getContext());
-//
-//                servPens = new ArrayList<ServPendenteCtrl>();
-//
-//                listServApd = new ListServPenCliAdapter(getContext(), servPens);
-//                lvServPen.setAdapter(listServApd);
-//
-//                Log.e("BOTAO","ENTROU AQUI: "+ servPens.size());
-//
-//                swipeRefreshLayout.setOnRefreshListener(this);
-//
-//                /**
-//                 * Showing Swipe Refresh animation on activity create
-//                 * As animation won't start on onCreate, post runnable is used
-//                 */
-//                //listaServPen();
-//                swipeRefreshLayout.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                swipeRefreshLayout.setRefreshing(true);
-//                                                listaServPen("",db.getUserDetails().getId());
-//                                            }
-//                                        }
-//                );
-//
-//                lvServPen.setOnItemClickListener(this);
+                swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+                lvServPen = (ListView) rootView.findViewById(R.id.lvServiceSilicit);
+
+
+                //cria o AlertDialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                alerta = builder.create();
+
+
+                db = new SQLiteHandler(getContext());
+
+                servPens = new ArrayList<ServPendenteCtrl>();
+
+                listServApd = new ListServPenCliAdapter(getContext(), servPens);
+                lvServPen.setAdapter(listServApd);
+
+                Log.e("BOTAO","ENTROU AQUI: "+ servPens.size());
+
+                swipeRefreshLayout.setOnRefreshListener(this);
+
+                /**
+                 * Showing Swipe Refresh animation on activity create
+                 * As animation won't start on onCreate, post runnable is used
+                 */
+                //listaServPen();
+                swipeRefreshLayout.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                swipeRefreshLayout.setRefreshing(true);
+                                                listaServPen("",db.getUserDetails().getId());
+                                            }
+                                        }
+                );
+
+                lvServPen.setOnItemClickListener(this);
                 return rootView;
             }
         }
@@ -721,7 +730,7 @@ public class ServicesTabActivity extends AppCompatActivity {
                                     objetoServPen.setId_refriCli(serv_penObj.getInt("id_refriCli"));
 
                                     servPens.add(objetoServPen);
-
+                                    swipeRefreshLayout.setRefreshing(false);
                                     Log.e("LISTA", "" + servPens.size());
                                     Log.e("Dados sqlite: ", "" + db.getAllMyServPen().size());
                                 } catch (JSONException e) {
@@ -735,12 +744,16 @@ public class ServicesTabActivity extends AppCompatActivity {
                             // Error in login. Get the error message
                             String errorMsg = jObj.getString("error_list");
                             Toast.makeText(getContext(), "Erro AQUI " + errorMsg, Toast.LENGTH_LONG).show();
+                            swipeRefreshLayout.setRefreshing(false);
+
                         }
                     } catch (JSONException e) {
                         // JSON error
                         e.printStackTrace();
                         Log.e("ERRORRRRR", "Json error: " + e.getMessage());
                         Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        swipeRefreshLayout.setRefreshing(false);
+
                     }
                     // stopping swipe refresh
                     swipeRefreshLayout.setRefreshing(false);
@@ -860,12 +873,20 @@ public class ServicesTabActivity extends AppCompatActivity {
 
         @Override
         public void onRefresh() {
-
+            listaServPen("",db.getUserDetails().getId());
         }
 
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            if((adapterView.getAdapter().getItemId(position) != -1) && !alerta.isShowing()) {
+                servPenPosition = (int) adapterView.getAdapter().getItemId(position);
+                servMyPen = servPens.get(position);
+                Toast.makeText(getContext(), "ServPen position: " + servPenPosition, Toast.LENGTH_LONG).show();
+                Log.e("Click lista ", "Posição do click" + servPenPosition);
+                Intent it = new Intent(getContext(), DetalheServPenActivity.class);
+                startActivity(it);
+                //getActivity().finish();
+            }
         }
 
         private synchronized void callConnetion() {

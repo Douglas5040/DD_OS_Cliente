@@ -26,8 +26,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tb_detalhes_ar"
-        android:layout_marginBottom="60dp"
-        android:paddingRight="5dp">
+        android:layout_marginBottom="5dp"
+        android:paddingRight="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,6 +36,44 @@
             android:paddingLeft="8dp"
             android:paddingTop="8dp"
             android:weightSum="1">
+
+            <LinearLayout
+                android:id="@+id/focus_detal_ar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tem Saída de Ar?  "
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxOutAir"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:gravity="right|center"
+                    android:layoutDirection="rtl"
+                    android:text="Não"
+                    android:textAlignment="inherit"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,6 +100,7 @@
                     android:layoutDirection="rtl"
                     android:text="Não"
                     android:textAlignment="inherit"
+                    android:textColor="#000"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -91,6 +130,68 @@
                     android:layoutDirection="rtl"
                     android:text="Não"
                     android:textAlignment="inherit"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tem Timer?  "
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right|center"
+                    android:layoutDirection="rtl"
+                    android:text="Não"
+                    android:textAlignment="inherit"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:text="Lotacionamento:"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/detalheLotacionamento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Local/Conmodo/Area "
+                    android:inputType="textPersonName"
+                    android:textColor="#000"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -161,32 +262,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="Capacidade Termica (BTU):"
-                    android:textColor="#000"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spinnerBTU"
-                    style="@style/spinner_style"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
                     android:text="Tensão (tomada)"
                     android:textColor="#000"
                     android:textSize="20sp"
@@ -232,6 +307,32 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:text="Capacidade (BTUs):"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerBTU"
+                    style="@style/spinner_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
                 android:paddingLeft="5dp">
 
                 <TextView
@@ -243,17 +344,16 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+
                 <EditText
                     android:id="@+id/editTamanho"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:focusableInTouchMode="true"
                     android:hint="Largura x Altura"
                     android:inputType="textPersonName"
-                    android:nextFocusDown="@+id/inc_tb_botton_edit_ar"
-                    android:selectAllOnFocus="true"
+                    android:textColor="#000"
                     android:textSize="22sp" />
 
             </LinearLayout>
@@ -280,11 +380,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:focusableInTouchMode="true"
                     android:hint="Tempo de Uso Ar-condicionado"
                     android:inputType="textPersonName"
-                    android:nextFocusDown="@+id/inc_tb_botton_edit_ar"
-                    android:selectAllOnFocus="true"
+                    android:textColor="#000"
                     android:textSize="22sp" />
 
             </LinearLayout>
@@ -292,102 +390,128 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="5dp">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10.09"
-                    android:text="Foto 1 (toque na foto para editar):"
+                    android:paddingRight="10dp"
+                    android:text="Peso (kg): "
                     android:textColor="#000"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/imgBtnFoto1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10.09"
-                    android:adjustViewBounds="false"
-                    android:background="@android:drawable/spinner_background"
-                    android:foreground="@drawable/camera_enhance"
-                    android:paddingRight="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/camera_enhance" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/editPeso"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10.09"
-                    android:text="Foto 2 (toque na foto para editar):"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Peso Ar-condicionado"
+                    android:inputType="textPersonName"
                     android:textColor="#000"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textSize="22sp" />
 
-                <ImageButton
-                    android:id="@+id/imgBtnFoto2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10.09"
-                    android:adjustViewBounds="false"
-                    android:background="@android:drawable/spinner_background"
-                    android:foreground="@drawable/camera"
-                    android:foregroundGravity="center"
-                    android:paddingRight="15dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/camera_enhance" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10.09"
-                    android:text="Foto 3 (toque na foto para editar):"
-                    android:textColor="#000"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/imgBtnFoto3"
+            <!--    <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="10.09"
-                    android:adjustViewBounds="false"
-                    android:background="@android:drawable/spinner_background"
-                    android:foreground="@drawable/camera"
-                    android:paddingRight="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/camera_enhance" />
-            </LinearLayout>
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.09"
+                        android:text="Foto 1 (toque na foto para editar):"
+                        android:textColor="#000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/imgBtnFoto1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="10.09"
+                        android:adjustViewBounds="false"
+                        android:background="@android:drawable/spinner_background"
+                        android:foreground="@drawable/camera_enhance"
+                        android:paddingRight="15dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/camera_enhance" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.09"
+                        android:text="Foto 2 (toque na foto para editar):"
+                        android:textColor="#000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/imgBtnFoto2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="10.09"
+                        android:adjustViewBounds="false"
+                        android:background="@android:drawable/spinner_background"
+                        android:foreground="@drawable/camera"
+                        android:foregroundGravity="center"
+                        android:paddingRight="15dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/camera_enhance" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.09"
+                        android:text="Foto 3 (toque na foto para editar):"
+                        android:textColor="#000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/imgBtnFoto3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="10.09"
+                        android:adjustViewBounds="false"
+                        android:background="@android:drawable/spinner_background"
+                        android:foreground="@drawable/camera"
+                        android:paddingRight="15dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/camera_enhance" />
+                </LinearLayout>-->
 
         </LinearLayout>
     </ScrollView>
 
-    <include
-        android:id="@+id/inc_tb_botton_edit_ar"
-        layout="@layout/toolbar_botton"/>
 </RelativeLayout>

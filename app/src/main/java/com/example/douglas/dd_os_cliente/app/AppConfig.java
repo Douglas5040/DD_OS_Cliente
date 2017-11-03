@@ -21,6 +21,12 @@ public class AppConfig {
     public static String URL_INSERIR_SERV_PEN_CLI = "http://"+constantIP+"/android_login_api/inserirServicePen.php";
 
     // Server user register url
+    public static String URL_INSERIR_DESCRI_AR = "http://"+constantIP+"/android_login_api/inserirDescriAr.php";
+
+    // Server user register url
+    public static String URL_GET_All_AR_CLI = "http://"+constantIP+"/android_login_api/listaAllArCli.php";
+
+    // Server user register url
     public static String URL_GET_SERVICES = "http://"+constantIP+"/android_login_api/listaServices.php";
 
     // Server user register url
@@ -36,6 +42,9 @@ public class AppConfig {
 
     // Server user register url
     public static String URL_GET_NV_ECON_AR = "http://"+constantIP+"/android_login_api/listaNvEcon.php";
+
+    // Server user register url
+    public static String URL_ALTERAR_DESCRI_AR = "http://"+constantIP+"/android_login_api/alterarDescriAr.php";
 
     // Server user register url
     public static String URL_GET_BTUS_AR = "http://"+constantIP+"/android_login_api/listaBTus.php";
