@@ -212,7 +212,7 @@ public class DetalherRefrigeActivity extends AppCompatActivity {
                 editTempoUso.setText("" + refrigerador.getTemp_uso());
                 editPeso.setText("" + refrigerador.getPeso());
                 editLotacionamento.setText("" + refrigerador.getLotacionamento());
-            }
+            } 
         }else{
             RefrigeradorCtrl refri = db.getArCli(RefrigeradorTabActivity.idQRCode);
             refrigerador = refri;
