@@ -15,7 +15,8 @@
         android:layout_marginBottom="60dp"
         android:layout_marginRight="15dp"
         app:backgroundTint="#FF03AC9C"
-        app:srcCompat="@drawable/ic_menu_send" />
+        app:srcCompat="@drawable/ic_menu_send"
+        tools:ignore="VectorDrawableCompat" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -101,8 +102,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
+                    android:padding="4dp"
                     android:soundEffectsEnabled="false"
-                    app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+                    app:srcCompat="@drawable/ic_today"
+                    tools:ignore="VectorDrawableCompat" />
 
             </LinearLayout>
 
@@ -136,8 +139,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
+                    android:padding="4dp"
                     android:soundEffectsEnabled="false"
-                    app:srcCompat="@android:drawable/ic_menu_recent_history" />
+                    app:srcCompat="@drawable/ic_query_builder"
+                    tools:ignore="VectorDrawableCompat" />
 
             </LinearLayout>
 
@@ -250,15 +255,6 @@
                         android:paddingBottom="10dp"
                         android:textSize="15sp" />
 
-                    <ImageButton
-                        android:id="@+id/imageButtonEditFone1"
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:background="@color/cardview_shadow_end_color"
-                        android:drawingCacheQuality="high"
-                        android:layerType="none"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@android:drawable/ic_menu_edit" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -288,14 +284,6 @@
                         android:paddingBottom="-5dp"
                         android:textSize="15sp" />
 
-                    <ImageButton
-                        android:id="@+id/imageButtonEditFone2"
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:background="@color/cardview_shadow_end_color"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@android:drawable/ic_menu_edit" />
                 </LinearLayout>
             </LinearLayout>
 

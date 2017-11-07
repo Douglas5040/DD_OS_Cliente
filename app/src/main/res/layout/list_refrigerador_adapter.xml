@@ -13,13 +13,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingBottom="8dp"
             android:weightSum="1">
 
             <TextView
                 android:id="@+id/textMarca"
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:elevation="0dp"
                 android:gravity="center"
                 android:text="Modelo"
@@ -42,7 +43,7 @@
             <TextView
                 android:id="@+id/textLotacionamento"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
                 android:paddingLeft="8dp"
@@ -55,7 +56,7 @@
         <TextView
             android:id="@+id/textDescri"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:text="Descrição:"
             android:textColor="@color/input_register_bg"

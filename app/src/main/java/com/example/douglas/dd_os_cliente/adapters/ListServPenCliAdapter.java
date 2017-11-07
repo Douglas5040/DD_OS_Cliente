@@ -1,6 +1,7 @@
 package com.example.douglas.dd_os_cliente.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,12 +55,22 @@ public class ListServPenCliAdapter extends BaseAdapter {
         ServPendenteCtrl msgDaVez = serPens.get(position);
         RefrigeradorCtrl refri = db.getArCli(msgDaVez.getId_refriCli());
 
-        tvRefriLota.setText(db.getNomeMaca(refri.getMarca())+" - "+msgDaVez.getLotacionamento());
-        tvHoraServ.setText(msgDaVez.getHora_serv().toString());
-        tvDataServ.setText(msgDaVez.getData_serv().toString());
+        Log.e("TEste --- Adpt ","tamanho Service: "+serPens.size());
+        Log.e("TEste --- Adpt ","Service: "+serPens.get(position).toString());
+        Log.e("TEste --- Adpt ","serv ID: "+serPens.get(position).getId_serv_pen());
+        if(msgDaVez.getId_serv_pen() != 0) {
+            tvRefriLota.setText(db.getNomeMaca(refri.getMarca()) + " - " + refri.getLotacionamento());
+            tvHoraServ.setText(msgDaVez.getHora_serv().toString());
+            tvDataServ.setText(msgDaVez.getData_serv().toString());
 
-        tvStatusServ.setText(msgDaVez.getStatus_serv());
+            tvStatusServ.setText(msgDaVez.getStatus_serv());
 
+        }else{
+            tvRefriLota.setText("Sem Serviço Solicitado!!!");
+            tvHoraServ.setText(" ");
+            tvDataServ.setText("");
+            tvStatusServ.setText("Solicite um Serviço!!!");
+        }
         return rootView;
     }
 }

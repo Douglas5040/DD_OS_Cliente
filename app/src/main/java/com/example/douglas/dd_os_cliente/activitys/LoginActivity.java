@@ -22,6 +22,7 @@ import com.example.douglas.dd_os_cliente.R;
 import com.example.douglas.dd_os_cliente.app.AppConfig;
 import com.example.douglas.dd_os_cliente.app.AppController;
 import com.example.douglas.dd_os_cliente.controler.PecsCtrl;
+import com.example.douglas.dd_os_cliente.controler.RefrigeradorCtrl;
 import com.example.douglas.dd_os_cliente.controler.ServPendenteCtrl;
 import com.example.douglas.dd_os_cliente.controler.ServicesCtrl;
 import com.example.douglas.dd_os_cliente.controler.UserClienteCtrl;
@@ -169,6 +170,8 @@ public class LoginActivity extends Activity {
                         listaBtus();
                         listaNvEcon();
                         listaTencao();
+                        listaServPen("",userCli.getId());
+                        listaRefrigeradores(userCli.getId(),"CADASTRADO");
 
                     } else {
                         // Error in login. Get the error message
@@ -218,6 +221,105 @@ public class LoginActivity extends Activity {
     }
 
 
+
+    private void listaServPen(final String status, final int cod_cli) {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listaServPen";
+        //final List<ServPendenteCtrl> listSerPen =null;
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_SERV_PEN_CLI, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    db.deleteAllMyServPen();
+                    // Check for error node in json
+                    if (!error) {
+                        JSONArray serv_penArray = jObj.getJSONArray("data");
+
+                        Log.e("TESTE", "ENTROU: " + serv_penArray.length());
+                        for (int i = 0; i < serv_penArray.length(); i++) {
+                            try {
+                                JSONObject serv_penObj = new JSONObject(serv_penArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                ServPendenteCtrl objetoServPen = new ServPendenteCtrl();
+
+                                objetoServPen.setId_serv_pen(serv_penObj.getInt("uid"));
+                                objetoServPen.setLatitude(Double.valueOf(serv_penObj.getString("latitude")));
+                                objetoServPen.setLongitude(Double.valueOf(serv_penObj.getString("longitude")));
+                                objetoServPen.setCliente_id(Integer.valueOf(serv_penObj.getString("cliente")));
+                                objetoServPen.setLotacionamento(serv_penObj.getString("lotacionamento"));
+                                objetoServPen.setEnder(serv_penObj.getString("ender"));
+                                objetoServPen.setComplemento(serv_penObj.getString("complemento"));
+                                objetoServPen.setCep(serv_penObj.getString("cep"));
+                                objetoServPen.setData_serv(serv_penObj.getString("data_serv"));
+                                objetoServPen.setHora_serv(serv_penObj.getString("hora_serv"));
+                                objetoServPen.setDescri_cli_problem(serv_penObj.getString("descriCliProblem"));
+                                objetoServPen.setDescri_tecni_problem(serv_penObj.getString("descriTecniProblem"));
+                                objetoServPen.setDescri_cli_refrigera(serv_penObj.getString("descriCliRefrigera"));
+                                objetoServPen.setStatus_serv(serv_penObj.getString("statusServ"));
+                                objetoServPen.setNomeCli(serv_penObj.getString("nome"));
+                                objetoServPen.setTipoCli(serv_penObj.getString("tipo"));
+                                objetoServPen.setFone1(serv_penObj.getString("fone1"));
+                                objetoServPen.setFone2(serv_penObj.getString("fone2"));
+                                objetoServPen.setId_refriCli(serv_penObj.getInt("id_refriCli"));
+
+                                if(!objetoServPen.getStatus_serv().equals("Cancelado"))db.addMyServPen(objetoServPen);
+                                Log.e("Dados sqlite: ", "" + db.getAllMyServPen().size());
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Menssagem " + errorMsg, Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR", "Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("status", status);
+                params.put("cliente", "" + cod_cli);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
 
     private void listaPecs() {
 
@@ -626,8 +728,6 @@ public class LoginActivity extends Activity {
                                 Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
                             }
                         }
-
-                        hideDialog();
                         // Launch main activity
                         //System.out.println("teste......");
                         Intent intent = new Intent(LoginActivity.this,
@@ -662,6 +762,118 @@ public class LoginActivity extends Activity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+
+    private void listaRefrigeradores(final int idCli, final String status) {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_listaServPen";
+        //final List<ServPendenteCtrl> listSerPen =null;
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_GET_All_AR_CLI, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Carregando dados: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    db.deleteReifigera();
+                    if (!error) {
+
+                        JSONArray serv_penArray = jObj.getJSONArray("data");
+                        Log.e("TESTE","ENTROU: "+serv_penArray.length());
+                        for (int i = 0; i < serv_penArray.length(); i++) {
+                            try {
+                                JSONObject refrigeraObj = new JSONObject(serv_penArray.get(i).toString());
+
+                                Log.e("Serviço ENCONTRADO: ", "Entrou no for");
+
+                                RefrigeradorCtrl objetoRefrigerador = new RefrigeradorCtrl();
+
+                                objetoRefrigerador.setId_refri(refrigeraObj.getInt("id_refri"));
+                                objetoRefrigerador.setHas_control(refrigeraObj.getInt("has_control"));
+                                objetoRefrigerador.setHas_exaustor(refrigeraObj.getInt("has_exaustor"));
+                                objetoRefrigerador.setHas_timer(Integer.valueOf(refrigeraObj.getString("has_timer")));
+                                objetoRefrigerador.setLotacionamento(refrigeraObj.getString("lotacionamento"));
+                                objetoRefrigerador.setCapaci_termica(refrigeraObj.getInt("capaci_termica"));
+                                    objetoRefrigerador.setFoto1(null);
+                                    objetoRefrigerador.setFoto2(null);
+                                    objetoRefrigerador.setFoto3(null);
+                                objetoRefrigerador.setMarca(refrigeraObj.getInt("marca"));
+                                objetoRefrigerador.setTipo_modelo(refrigeraObj.getInt("tipo_modelo"));
+                                objetoRefrigerador.setNivel_econo(refrigeraObj.getInt("nivel_econo"));
+                                objetoRefrigerador.setTencao_tomada(refrigeraObj.getInt("tencao_tomada"));
+                                objetoRefrigerador.setId_cliente(refrigeraObj.getInt("id_cliente"));
+                                objetoRefrigerador.setTemp_uso(refrigeraObj.getInt("temp_uso"));
+                                objetoRefrigerador.setTamanho(refrigeraObj.getString("tamanho"));
+                                objetoRefrigerador.setSaida_ar(refrigeraObj.getString("saida_ar"));
+
+                                db.addRefrigerador(objetoRefrigerador);
+
+                                Log.e("LISTA"," "+i+refrigeraObj.getInt("marca"));
+                                Log.e("Dados sqlite: ", ""+db.getAllMyServPen().size());
+
+
+                                hideDialog();
+                            } catch (JSONException e) {
+                                Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+
+                                hideDialog();
+
+                            }
+                        }
+
+
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_list");
+                        Toast.makeText(getApplicationContext(), "Menssagem "+errorMsg, Toast.LENGTH_LONG).show();
+
+                        hideDialog();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Log.e("ERRORRRRR","Json error: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                    hideDialog();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Lista Service Error: " + error.getMessage());
+
+                Toast.makeText(getApplicationContext(),"Sem Cadastro!!!", Toast.LENGTH_LONG).show();
+
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id_cli", ""+idCli);
+                params.put("status", ""+status);
                 return params;
             }
 

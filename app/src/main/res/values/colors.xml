@@ -15,7 +15,7 @@
     <color name="btn_logut_bg">#2a2a2a</color>
 
     <color name="colorPrimary">#009d8f</color>
-    <color name="colorPrimaryDark">#00796b</color>
+    <color name="colorPrimaryDark">#015e53</color>
     <color name="colorAccent">#ededed</color>
 
     <string-array name="movie_serial_bg">

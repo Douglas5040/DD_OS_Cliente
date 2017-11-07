@@ -6,8 +6,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="87dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="6dp"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,9 +21,8 @@
                 android:id="@+id/nomeRefriLota"
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="0dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:elevation="0dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingTop="5dp"
@@ -34,13 +35,13 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/horaServ"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:paddingRight="10dp"
@@ -53,7 +54,7 @@
                 <TextView
                     android:id="@+id/dataServ"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:paddingRight="10dp"
@@ -69,7 +70,7 @@
         <TextView
             android:id="@+id/statusServ"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:text="Status: Aguardando Confirmação"
             android:textColor="@color/input_register_bg"

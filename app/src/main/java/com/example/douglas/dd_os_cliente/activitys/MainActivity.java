@@ -1,11 +1,13 @@
 package com.example.douglas.dd_os_cliente.activitys;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -29,12 +31,13 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity{
     private ProgressDialog dialog = null;
     private Button btnselectpic;
     private Button btnConta;
     private Button btnRefri;
     private Button btnServ;
+    private AlertDialog alerta;
     ImageView img;
     private static int REQCODE = 12;
     @Override
@@ -46,15 +49,43 @@ public class MainActivity extends AppCompatActivity  {
         btnRefri = (Button)findViewById(R.id.btnRefri);
         btnServ = (Button)findViewById(R.id.btnServ);
 
+        img = (ImageView) findViewById(R.id.imageViewPrinc);
+
         img = (ImageView) findViewById(R.id.imageView);
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Uploading Image...");
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
 
         btnselectpic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(),"Autenticar Serviço: QRCode",Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getApplication());
+//                //define o titulo
+//                builder.setTitle("AUTENTICANDO SERVIÇO");
+//                //define a mensagem
+//
+//                //builder.setIcon(R.drawable.ic_action_warning);
+//                //builder.setMessage("Cadastre um Refrigerador para realizar um serviço!!!");
+//                //builder.setView(btnConta);
+//                //define um botão como positivo
+//                builder.setPositiveButton("OK",new DialogInterface.OnClickListener()
+//
+//                {
+//                    public void onClick (DialogInterface arg0, int arg1){
+//
+//
+//                    }
+//                });
+//                //cria o AlertDialog
+//                alerta = builder.create();
+//                //Exibe
+//                alerta.show();
+                //dialog.setMessage("Uploading Image...");
+
+                dialog.setTitle("teste");
+                dialog.setIcon(R.drawable.android);
+                dialog.setFeatureDrawableResource(0, R.drawable.refrigerador_icone);
+                dialog.show();
             }
         });
         ;

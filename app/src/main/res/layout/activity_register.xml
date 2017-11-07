@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/bg_register"
+    android:background="@color/colorPrimary"
     android:elevation="1dp"
     android:gravity="center"
     android:orientation="vertical"
@@ -18,7 +18,20 @@
         android:weightSum="1">
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/editRegCpfCnpj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorAccent"
+            android:hint="@string/hint_cpf_cnpj"
+            android:inputType="number"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="#000"
+            android:textColorHint="@color/input_register_hint" />
+
+        <EditText
+            android:id="@+id/editRegName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -27,21 +40,11 @@
             android:inputType="textCapWords"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/input_register"
+            android:textColor="#000"
             android:textColorHint="@color/input_register_hint" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            style="@android:style/Widget.Holo.Spinner"
-            android:layout_width="330dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="-3dp"
-            android:layout_marginTop="-3dp"
-            android:background="@android:drawable/btn_dropdown" />
-
         <EditText
-            android:id="@+id/matricula"
+            android:id="@+id/editRegEmail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -50,24 +53,11 @@
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/input_register"
+            android:textColor="#000"
             android:textColorHint="@color/input_register_hint" />
 
         <EditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/colorAccent"
-            android:hint="@string/hint_cpf"
-            android:inputType="number"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
-
-        <EditText
-            android:id="@+id/password"
+            android:id="@+id/editRegpassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -76,24 +66,36 @@
             android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/input_register"
+            android:textColor="#000"
             android:textColorHint="@color/input_register_hint" />
 
         <!-- Login Button -->
+
+        <Spinner
+            android:id="@+id/spinnerRegTipoCli"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="-3dp"
+            android:layout_marginRight="-3dp"
+            android:layout_marginTop="-3dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:paddingTop="-5dp" />
 
         <Button
             android:id="@+id/btnSeguinte"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="@color/bg_login"
+            android:alpha="0.76"
+            android:background="#000"
             android:text="@string/btn_seguinte"
             android:textColor="@color/white" />
 
         <!-- Link to Login Screen -->
 
         <Button
-            android:id="@+id/btnLinkToLoginScreen"
+            android:id="@+id/btnLinkToLoginScreenReg"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"
@@ -102,6 +104,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="15dp" />
+
     </LinearLayout>
 
 </LinearLayout>

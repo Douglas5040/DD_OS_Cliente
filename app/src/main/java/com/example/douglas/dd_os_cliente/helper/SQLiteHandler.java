@@ -28,7 +28,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
-	private static final int DATABASE_VERSION = 53;
+	private static final int DATABASE_VERSION = 55;
 
 	// Database Name
 	private static final String DATABASE_NAME = "android_api";
@@ -487,7 +487,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 			else values.put(KEY_ID_REFRI, refrigera.getId_refri());
 			values.put(KEY_PESO_AR, refrigera.getPeso()); // matricula
 			values.put(KEY_HAS_CONTROL, refrigera.getHas_control()); // Email
-			values.put(KEY_LOTACIONAMENTO, refrigera.getHas_control()); // Email
+			values.put(KEY_LOTACIONAMENTO, refrigera.getLotacionamento()); // Email
 			values.put(KEY_HAS_EXAUSTOR, refrigera.getHas_exaustor()); // UID
 			values.put(KEY_SAIDA_DE_AR, refrigera.getSaida_ar()); // Name
 			values.put(KEY_CAPACIDADE_TERMI, refrigera.getCapaci_termica()); // matricula
@@ -512,6 +512,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.e(TAG, "---New Refrigerador inserted into sqlite: " + id);
         Log.e(TAG, "---New Refrigerador Marca: " +  getNomeMaca(Integer.parseInt(values.get(KEY_MARCA_AR).toString())));
 	}
+
 	public boolean verifyRefri(int codRefri){
 		UserFuncionarioCtrl user_func = new UserFuncionarioCtrl();
 		String selectQuery = "SELECT "+KEY_ID_REFRI+" FROM " + TABLE_AR_CLIENTE+" WHERE "+KEY_ID_REFRI+"="+codRefri;
@@ -760,8 +761,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 			Log.e("Retorno AllMyServPèn: ","NOME CLI: : >>>>><<<<> "+listServPens.get(cursor.getPosition()).getNomeCli());
 
-
 		}
+        if(listServPens.isEmpty()){
+            ServPendenteCtrl objetoServ = new ServPendenteCtrl();
+            listServPens.add(objetoServ);
+        }
 		cursor.close();
 		db.close();
 		// return user
@@ -837,7 +841,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		Log.e("Posição ServPEn::: ","--- "+position);
 		try {
 
-			String selectQuery = "SELECT  * FROM " + TABLE_MY_SERV_PEN +" WHERE " + KEY_ID_SERV_PEN+" = " + "'"+position+"'";
+			String selectQuery = "SELECT  * FROM " + TABLE_MY_SERV_PEN +" WHERE " + KEY_ID_SERV_PEN+" = " + +position;
 
 			SQLiteDatabase db = this.getReadableDatabase();
 			Cursor cursor = db.rawQuery(selectQuery, null);
@@ -879,6 +883,93 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		}
 		return servPen;
 	}
+
+    public boolean verifyRefriService(int id_refri) {
+
+        ServPendenteCtrl servPen = new ServPendenteCtrl();
+        Log.e("Posição ServPEn::: ","--- "+id_refri);
+        try {
+
+            String selectQuery = "SELECT * FROM " + TABLE_MY_SERV_PEN +" WHERE " + KEY_ID_REFRI_CLI+" = " + +id_refri;
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.e(TAG, "Retorno Service por refrigerador: "+cursor.getCount());
+
+            // Move to first row
+            if(cursor.moveToFirst()) {
+                cursor.close();
+                db.close();
+                return true;
+
+            }else{
+                cursor.close();
+                db.close();
+                Log.e("Erro"," Retorno Da consulta do serviço por ID esta vasio");
+                return  false;
+            }
+
+            // return user
+
+        }catch (Exception e){
+            Log.e("Erro Consulta: "," erro no retorno "+e);
+            return false;
+        }
+    }
+
+    public ServPendenteCtrl getServiveRefri(int id_refri) {
+
+        ServPendenteCtrl servPen = new ServPendenteCtrl();
+        Log.e("Posição ServPEn::: ","--- "+id_refri);
+        try {
+
+            String selectQuery = "SELECT * FROM " + TABLE_MY_SERV_PEN +" WHERE " + KEY_ID_REFRI_CLI+" = " + +id_refri;
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.e(TAG, "Retorno Service por refrigerador: "+cursor.getCount());
+
+            // Move to first row
+            if(cursor.moveToLast()) {
+
+                Log.e("Retorno ServPèn: ", "Tamanho: >>>>><<<<> " + cursor.getCount());
+                servPen.setId_serv_pen(Integer.parseInt(cursor.getString(0)));
+                servPen.setLatitude(Double.parseDouble(cursor.getString(1)));
+                servPen.setLongitude(Double.parseDouble(cursor.getString(2)));
+                servPen.setCliente_id(Integer.parseInt(cursor.getString(3)));
+                servPen.setLotacionamento(cursor.getString(4));
+                servPen.setEnder(cursor.getString(5));
+                servPen.setComplemento(cursor.getString(6));
+                servPen.setCep(cursor.getString(7));
+                servPen.setData_serv(cursor.getString(8));
+                servPen.setHora_serv(cursor.getString(9));
+                servPen.setDescri_cli_problem(cursor.getString(10));
+                servPen.setDescri_tecni_problem(cursor.getString(11));
+                servPen.setNomeCli(cursor.getString(12));
+                servPen.setTipoCli(cursor.getString(13));
+                servPen.setDescri_cli_refrigera(cursor.getString(14));
+                servPen.setId_refriCli(cursor.getInt(15));
+                servPen.setStatus_serv(cursor.getString(16));
+                servPen.setFone1(cursor.getString(17));
+                servPen.setFone2(cursor.getString(18));
+                cursor.close();
+                db.close();
+                return servPen;
+
+            }else{
+                cursor.close();
+                db.close();
+                Log.e("Erro"," Retorno Da consulta do serviço por ID esta vasio");
+                return  servPen;
+            }
+
+            // return user
+
+        }catch (Exception e){
+            Log.e("Erro Consulta: "," erro no retorno "+e);
+            return servPen;
+        }
+    }
 
 	public RefrigeradorCtrl getArCli(int id_ar) {
 
@@ -926,7 +1017,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 		}catch (Exception e){
 			Log.e("Erro Consulta: "," erro no retorno "+e);
-			return null;
+			return objetoAr;
 		}
 	}
 
@@ -944,7 +1035,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 			// Move to first row
 
-			if(cursor.moveToNext()){
+			while(cursor.moveToNext()){
 				RefrigeradorCtrl objetoAr = new RefrigeradorCtrl();
 
 				objetoAr.setId_refri(cursor.getInt(0));
@@ -968,7 +1059,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 				listObjetoAr.add(objetoAr);
 				Log.e(TAG,"Ar Adicionado: "+objetoAr.toString());
-			}else{
+			}
+			if(listObjetoAr.isEmpty()){
 				RefrigeradorCtrl objetoAr = new RefrigeradorCtrl();
 				listObjetoAr.add(objetoAr);
 			}
@@ -1410,6 +1502,19 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		try {
 			// Delete All Rows
 			db.delete(TABLE_AR_CLIENTE, KEY_ID_REFRI + " = " + idrRefri, null);
+		}catch (Exception ex){
+			Log.e("Erro ao Deletar Ar ",""+ex);
+		}
+		db.close();
+
+		Log.e(TAG, "Ar Deletado Com Sucesso!!!");
+	}
+
+	public void deleteRefrigeraCli(int idCli) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		try {
+			// Delete All Rows
+			db.delete(TABLE_AR_CLIENTE, KEY_ID_CLIENTE_AR + " = " + idCli, null);
 		}catch (Exception ex){
 			Log.e("Erro ao Deletar Ar ",""+ex);
 		}

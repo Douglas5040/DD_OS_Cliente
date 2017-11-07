@@ -28,10 +28,11 @@ public class ServPendenteCtrl implements Serializable {
     private String fone1;
     private String fone2;
     private int id_refriCli;
+    private int tipoManu;
 
     public ServPendenteCtrl(){}
     public ServPendenteCtrl(int id_serv_pen, double latitude, double longitude, int cliente_id, String lotacionamento, String ender, String complemento, String cep, String fone1, String fone2,
-                            String data_serv, String hora_serv, String descri_cli_problem, int id_refriCli,  String descri_tecni_problem, String descri_cli_refrigera, String status_serv, String nomeCli, String tipoCli){
+                            String data_serv, int tipoManu, String hora_serv, String descri_cli_problem, int id_refriCli,  String descri_tecni_problem, String descri_cli_refrigera, String status_serv, String nomeCli, String tipoCli){
 
         this.id_serv_pen = id_serv_pen;
         this.latitude = latitude;
@@ -52,6 +53,15 @@ public class ServPendenteCtrl implements Serializable {
         this.fone1 = fone1;
         this.fone2 = fone2;
         this.id_refriCli = id_refriCli;
+        this.tipoManu = tipoManu;
+    }
+
+    public int getTipoManu() {
+        return tipoManu;
+    }
+
+    public void setTipoManu(int tipoManu) {
+        this.tipoManu = tipoManu;
     }
 
     public int getId_refriCli() {

@@ -71,6 +71,9 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout tabLayout ;
 
+    public static boolean clickQRCode = false;
+    public static int idQRCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +111,29 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+
+        if (id == R.id.action_conta_refri) {
+            Intent i = new Intent(getApplicationContext(), ContaActivity.class);  //your class
+            startActivity(i);
+            finish();
+            return true;
+        } if (id == R.id.action_Services_refri) {
+            Intent i = new Intent(getApplicationContext(), ServicesTabActivity.class);  //your class
+            startActivity(i);
+            finish();
+            return true;
+        } if (id == R.id.action_refrigeradores_refri) {
+            Intent i = new Intent(getApplicationContext(), RefrigeradorTabActivity.class);  //your class
+            startActivity(i);
+            finish();
+            return true;
+        }if (id == R.id.action_qr_code_refrigerador) {
+            clickQRCode = true;
+            idQRCode = 11;
+            Toast.makeText(getApplicationContext(),"Abrir leitor de QRcode!!!",Toast.LENGTH_LONG).show();
+            Intent i = new Intent(getApplicationContext(), DetalherRefrigeActivity.class);  //your class
+            startActivity(i);
+
             return true;
         }
         if (id == android.R.id.home) {
@@ -202,9 +227,13 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
                 swipeRefreshLayout.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                swipeRefreshLayout.setRefreshing(true);
+                                                refrigeradores.clear();
 
-                                               listaRefrigeradores(db.getUserDetails().getId());
+                                                swipeRefreshLayout.setRefreshing(true);
+                                                refrigeradores.addAll(db.getAllArCli());
+                                                listRefriApd.notifyDataSetChanged();
+
+                                                swipeRefreshLayout.setRefreshing(false);
                                             }
                                         }
                 );
@@ -302,113 +331,11 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
 
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
 
-        private void listaRefrigeradores(final int idCli) {
-
-            // showing refresh animation before making http call
-            swipeRefreshLayout.setRefreshing(true);
-
-            // Tag used to cancel the request
-            String tag_string_req = "req_listaServPen";
-            //final List<ServPendenteCtrl> listSerPen =null;
-
-
-            StringRequest strReq = new StringRequest(Request.Method.POST,
-                    AppConfig.URL_GET_All_AR_CLI, new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String response) {
-                    Log.d(TAG, "Carregando dados: " + response.toString());
-
-                    try {
-                        JSONObject jObj = new JSONObject(response);
-                        boolean error = jObj.getBoolean("error");
-
-                        // Check for error node in json
-                        if (!error) {
-
-                            JSONArray serv_penArray = jObj.getJSONArray("data");
-
-                            Log.e("TESTE","ENTROU: "+serv_penArray.length());
-                            refrigeradores.clear();
-                            for (int i = 0; i < serv_penArray.length(); i++) {
-                                try {
-                                    JSONObject refrigeraObj = new JSONObject(serv_penArray.get(i).toString());
-
-                                    Log.e("Serviço ENCONTRADO: ", "Entrou no for");
-
-                                    RefrigeradorCtrl objetoRefrigerador = new RefrigeradorCtrl();
-
-                                    objetoRefrigerador.setId_refri(refrigeraObj.getInt("id_refri"));
-                                    objetoRefrigerador.setHas_control(refrigeraObj.getInt("has_control"));
-                                    objetoRefrigerador.setHas_exaustor(refrigeraObj.getInt("has_exaustor"));
-                                    objetoRefrigerador.setHas_timer(Integer.valueOf(refrigeraObj.getString("has_timer")));
-                                    objetoRefrigerador.setLotacionamento(refrigeraObj.getString("lotacionamento"));
-                                    objetoRefrigerador.setCapaci_termica(refrigeraObj.getInt("capaci_termica"));
-//                                    objetoRefrigerador.setFoto1(refrigeraObj.getString("foto1"));
-//                                    objetoRefrigerador.setFoto2(refrigeraObj.getString("foto2"));
-//                                    objetoRefrigerador.setFoto3(refrigeraObj.getString("foto3"));
-                                    objetoRefrigerador.setMarca(refrigeraObj.getInt("marca"));
-                                    objetoRefrigerador.setTipo_modelo(refrigeraObj.getInt("tipo_modelo"));
-                                    objetoRefrigerador.setNivel_econo(refrigeraObj.getInt("nivel_econo"));
-                                    objetoRefrigerador.setTencao_tomada(refrigeraObj.getInt("tencao_tomada"));
-                                    objetoRefrigerador.setId_cliente(refrigeraObj.getInt("id_cliente"));
-                                    objetoRefrigerador.setTemp_uso(refrigeraObj.getInt("temp_uso"));
-                                    objetoRefrigerador.setTamanho(refrigeraObj.getString("tamanho"));
-                                    objetoRefrigerador.setSaida_ar(refrigeraObj.getString("saida_ar"));
-                                    refrigeradores.add(objetoRefrigerador);
-
-                                    Log.e("LISTA",""+refrigeradores.size());
-                                    Log.e("Dados sqlite: ", ""+db.getAllMyServPen().size());
-                                } catch (JSONException e) {
-                                    Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
-                                }
-                            }
-                            listRefriApd.notifyDataSetChanged();
-
-
-                        } else {
-                            // Error in login. Get the error message
-                            String errorMsg = jObj.getString("error_list");
-                            Toast.makeText(getContext(), "Erro AQUI "+errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // JSON error
-                        e.printStackTrace();
-                        Log.e("ERRORRRRR","Json error: " + e.getMessage());
-                        Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                    // stopping swipe refresh
-                    swipeRefreshLayout.setRefreshing(false);
-
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Lista Service Error: " + error.getMessage());
-
-                    Toast.makeText(getContext(),"Sem Cadastro!!!", Toast.LENGTH_LONG).show();
-                    // stopping swipe refresh
-
-                    listRefriApd.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting parameters to login url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("id_cli", ""+idCli);
-                    return params;
-                }
-
-            };
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
+            //swipeRefreshLayout.setRefreshing(true);
         }
 
         public void addArCliBD(final RefrigeradorCtrl arCli) {
@@ -440,10 +367,12 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
                         Log.e(TAG, "-----------------------2 ");
                         Toast.makeText(getContext(), "Dados Salvos com Sucesso!!", Toast.LENGTH_LONG).show();
 
-                        LinearLayout focus = (LinearLayout) getView().findViewById(R.id.focusRefri);
-                        focus.requestFocus();
-
                         dialog.dismiss();
+
+                        getActivity().finish();
+                        Intent it = new Intent(getContext(), RefrigeradorTabActivity.class);
+                        startActivity(it);
+
 
                     } else {
                         // Error in login. Get the error message
@@ -549,27 +478,145 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
             alerta.show();
         }
 
+        private void updateStatusRefri(final int id_refri, final String new_status, final int position) {
+            Log.d(TAG, ">>>>>>>: "+id_refri +" -- "+new_status );
+            // Tag used to cancel the request
+            String tag_string_req = "req_new_status";
+
+//        pDialog.setMessage("Carregando...");
+//        showDialog();
+
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    AppConfig.URL_UPDATE_STATUS_REFRI, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "Update Status Response: " + response.toString());
+
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean("error");
+
+                        // Check for error node in json
+                        if (!error) {
+
+                            Log.e("Update Status: ", "Status Atualizado com sucesso!!!" );
+
+
+                            db.deleteUniRefrigera(id_refri);
+                            refrigeradores.remove(position);
+                            listRefriApd.notifyDataSetChanged();
+                        } else {
+                            // Error in login. Get the error message
+                            Log.e("Errro in new Status: ", "Erro ao atualizar novo status!!!" );
+                            String errorMsg = jObj.getString("error_msg");
+                            Toast.makeText(getContext(),
+                                    errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        // JSON error
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "New Status Error: " + error.getMessage());
+                    Toast.makeText(getContext(),
+                            "Conecte-se a Internet", Toast.LENGTH_LONG).show();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("id_refri", String.valueOf(id_refri));
+                    params.put("newStatus", new_status);
+
+                    return params;
+                }
+
+            };
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        }
+
+        private void confirmDeleteRefri(final RefrigeradorCtrl refri, final int position){
+            //Cria o gerador do AlertDialog
+            db = new SQLiteHandler(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+            //define o titulo
+            builder.setTitle("Confirmar Apagar Refrigerador");
+            //define a mensagem
+            builder.setMessage("Você deseja Ecluir este Refrigerador?");
+            //define um botão como positivo
+            builder.setPositiveButton("Sim",new DialogInterface.OnClickListener()
+
+            {
+                public void onClick (DialogInterface arg0, int arg1){
+                    //Toast.makeText(getApplicationContext(), "positivo=" + arg1, Toast.LENGTH_SHORT).show();
+                    updateStatusRefri(refri.getId_refri(),"EXCLUIDO", position);
+
+
+                }
+            });
+            //define um botão como negativo.
+            builder.setNegativeButton("Não",new DialogInterface.OnClickListener()
+
+            {
+                public void onClick (DialogInterface arg0, int arg1){
+                    Toast.makeText(getContext(), "negativo=" + arg1, Toast.LENGTH_SHORT).show();
+                }
+            });
+            //cria o AlertDialog
+            alerta = builder.create();
+            //Exibe
+            alerta.show();
+        }
+
         @Override
         public void onRefresh() {
-            listaRefrigeradores(db.getUserDetails().getId());
+            refrigeradores.clear();
+            swipeRefreshLayout.setRefreshing(true);
+            refrigeradores.addAll(db.getAllArCli());
+            listRefriApd.notifyDataSetChanged();
+
+            swipeRefreshLayout.setRefreshing(false);
         }
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            if((adapterView.getAdapter().getItemId(position) != -1) && !alerta.isShowing()) {
+            if((adapterView.getAdapter().getItemId(position) != -1) && !alerta.isShowing() && refrigeradores.get(position).getId_refri() != 0) {
                 positionREfrigerador = (int) adapterView.getAdapter().getItemId(position);
                 refrigeradorSelected = refrigeradores.get(position);
                 Toast.makeText(getContext(), "Refrigerador position: " + positionREfrigerador, Toast.LENGTH_LONG).show();
                 Log.e("Click lista ", "Posição do click" + positionREfrigerador);
                 Intent it = new Intent(getContext(), DetalherRefrigeActivity.class);
                 startActivity(it);
-                //getActivity().finish();
+                getActivity().finish();
             }
         }
 
         @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            return false;
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            if(adapterView.getAdapter().getItemId(position) != -1 && refrigeradores.get(position).getId_refri() != 0) {
+                //lvMyServ.removeViewAt(position);
+                if (!db.verifyRefriService(refrigeradores.get(position).getId_refri())){
+                    confirmDeleteRefri(refrigeradores.get(position), position);
+                }else{
+                    Toast.makeText(getContext(),"Serviço Pendente para este Refrigerador!!!",Toast.LENGTH_LONG).show();
+                }
+
+            }
+            //Log.e("Click Longo lista ", "Posição do click" + position);
+            return true;
         }
     }
 

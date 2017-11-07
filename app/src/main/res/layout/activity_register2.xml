@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/bg_register"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="10dp">
@@ -22,15 +22,30 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Endereço:"
+            android:text="@string/enderer"
             android:textColor="@color/cardview_light_background"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/cardview_light_background" />
+            android:background="@color/cardview_light_background"
+            android:contentDescription=""
+            tools:ignore="ContentDescription" />
+
+        <EditText
+            android:id="@+id/edit_cep"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@android:drawable/picture_frame"
+            android:hint="@string/hint_cep"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:textColor="@color/input_register"
+            android:textColorHint="@color/input_register_hint" />
 
         <EditText
             android:id="@+id/edit_ender"
@@ -42,9 +57,9 @@
             android:hint="@string/hint_ender"
             android:inputType="textPostalAddress"
             android:padding="10dp"
-            android:singleLine="true"
             android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
+            android:textColorHint="@color/input_register_hint"
+            android:maxLines="1" />
 
         <EditText
             android:id="@+id/edit_bairro"
@@ -55,22 +70,9 @@
             android:hint="@string/hint_bairro"
             android:inputType="textPostalAddress"
             android:padding="10dp"
-            android:singleLine="true"
             android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
-
-        <EditText
-            android:id="@+id/edit_cep"
-            android:layout_width="fill_parent"
-            android:layout_height="45dp"
-            android:layout_marginBottom="6dp"
-            android:background="@android:drawable/picture_frame"
-            android:hint="@string/hint_cep"
-            android:inputType="numberDecimal"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
+            android:textColorHint="@color/input_register_hint"
+            android:maxLines="1" />
 
         <EditText
             android:id="@+id/edit_pont_ref"
@@ -81,9 +83,9 @@
             android:hint="@string/hint_pontoRef"
             android:inputType="textPostalAddress"
             android:padding="10dp"
-            android:singleLine="true"
             android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
+            android:textColorHint="@color/input_register_hint"
+            android:maxLines="1" />
 
         <!-- Login Button -->
 
@@ -91,15 +93,17 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contatos:"
+            android:text="@string/contatos"
             android:textColor="@color/cardview_light_background"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/cardview_light_background" />
+            android:background="@color/cardview_light_background"
+            tools:ignore="ContentDescription" />
 
         <EditText
             android:id="@+id/editFone1"
@@ -111,9 +115,9 @@
             android:hint="@string/hint_fone1"
             android:inputType="phone"
             android:padding="10dp"
-            android:singleLine="true"
             android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
+            android:textColorHint="@color/input_register_hint"
+            android:maxLines="1" />
 
         <EditText
             android:id="@+id/editFone2"
@@ -124,7 +128,6 @@
             android:hint="@string/hint_fone2"
             android:inputType="phone"
             android:padding="10dp"
-            android:singleLine="true"
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
 
@@ -133,7 +136,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="@color/colorPrimaryDark"
+            android:alpha="0.76"
+            android:background="#000"
             android:text="@string/btn_register"
             android:textColor="@color/white" />
 
@@ -142,7 +146,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnLinkToLoginScreen"
+        android:id="@+id/btnLinkToRegister2Screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dip"
@@ -150,6 +154,6 @@
         android:text="@string/btn_link_to_login"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

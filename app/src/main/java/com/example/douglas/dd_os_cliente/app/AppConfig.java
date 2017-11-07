@@ -2,17 +2,25 @@ package com.example.douglas.dd_os_cliente.app;
 
 public class AppConfig {
 	// Server user login url
-	static String constantIP = "10.0.2.2";
+	static String constantIP = "192.168.0.128";
 
     public static String URL_LOGIN = "http://"+constantIP+"/android_login_api/loginCliente.php";
+
+    public static String URL_VERIFY_USER = "http://"+constantIP+"/android_login_api/verifyCliExist.php";
 
     public static String URL_EDIT_USER = "http://"+constantIP+"/android_login_api/alterarDetalhesUser.php";
 
     // Server user register url
-	public static String URL_REGISTER = "http://"+constantIP+"/android_login_api/register.php";
+	public static String URL_REGISTER_CLI = "http://"+constantIP+"/android_login_api/registerCliente.php";
 
     // Server user register url
     public static String URL_SERV_PEN = "http://"+constantIP+"/android_login_api/listaServPen.php";
+
+    // Server user register url
+    public static String URL_UPDATE_STATUS = "http://"+constantIP+"/android_login_api/alterarStatus.php";
+
+    // Server user register url
+    public static String URL_UPDATE_STATUS_REFRI = "http://"+constantIP+"/android_login_api/alterarStatusRefri.php";
 
     // Server user register url
     public static String URL_SERV_PEN_CLI = "http://"+constantIP+"/android_login_api/listaServPenCli.php";
@@ -25,6 +33,12 @@ public class AppConfig {
 
     // Server user register url
     public static String URL_GET_All_AR_CLI = "http://"+constantIP+"/android_login_api/listaAllArCli.php";
+
+    // Server user register url
+    public static String URL_GET_AR_CLI = "http://"+constantIP+"/android_login_api/retornaArCli.php";
+
+    // Server user register url
+    public static String URL_GET_AR_SERV_CLI = "http://"+constantIP+"/android_login_api/getArForQRcode.php";
 
     // Server user register url
     public static String URL_GET_SERVICES = "http://"+constantIP+"/android_login_api/listaServices.php";

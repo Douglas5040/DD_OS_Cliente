@@ -1,6 +1,7 @@
 package com.example.douglas.dd_os_cliente.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +53,21 @@ public class ListRefrigeradorAdapter extends BaseAdapter {
         SQLiteHandler db = new SQLiteHandler(context);
         RefrigeradorCtrl refrigeradorDaVez = refrigeradores.get(position);
 
-        textMarca.setText(db.getNomeMaca(refrigeradorDaVez.getMarca()));
-        textLotacionamento.setText(refrigeradorDaVez.getLotacionamento().toString());
-        textDescri.setText(db.getNomeModelo(refrigeradorDaVez.getTipo_modelo())+" - "
-                            +db.getNomeBTU(refrigeradorDaVez.getCapaci_termica())+"BTUs, "
-                            +refrigeradorDaVez.getNivel_econo()+" - "
-                            +refrigeradorDaVez.getPeso()+"Kg");
-
+        Log.e("TEste --- Adpt ","tamanho refrigeradores: "+refrigeradores.size());
+        Log.e("TEste --- Adpt ","refrigerador: "+refrigeradores.get(position).toString());
+        Log.e("TEste --- Adpt ","refrigerador: "+refrigeradores.get(position).getMarca());
+        if(refrigeradorDaVez.getId_refri() != 0) {
+            textMarca.setText(db.getNomeMaca(refrigeradorDaVez.getMarca()));
+            textLotacionamento.setText(refrigeradorDaVez.getLotacionamento());
+            textDescri.setText(db.getNomeModelo(refrigeradorDaVez.getTipo_modelo()) + " - "
+                    + db.getNomeBTU(refrigeradorDaVez.getCapaci_termica()) + "BTUs, "
+                    + refrigeradorDaVez.getNivel_econo() + " - "
+                    + refrigeradorDaVez.getPeso() + "Kg");
+        }else {
+            textMarca.setText("");
+            textLotacionamento.setText("Sem Refrigerador...");
+            textDescri.setText("");
+        }
         return rootView;
     }
 }

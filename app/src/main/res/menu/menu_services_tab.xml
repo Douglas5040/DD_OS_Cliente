@@ -1,9 +1,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.douglas.dd_os_cliente.activitys.ServicesCliActivity">
+    tools:context="com.example.douglas.dd_os_cliente.activitys.RefrigeradorTabActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_conta_services"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings" />
+        android:title="@string/action_conta"
+        tools:ignore="AppCompatResource" />
+    <item
+        android:id="@+id/action_Services_services"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_services"
+        tools:ignore="AppCompatResource" />
+    <item
+        android:id="@+id/action_refrigeradores_services"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_refrigeradores"
+        tools:ignore="AppCompatResource" />
+
 </menu>

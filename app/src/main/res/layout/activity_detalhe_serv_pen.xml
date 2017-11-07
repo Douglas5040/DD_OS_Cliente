@@ -20,7 +20,8 @@
         app:subtitleTextColor="@color/colorAccent"
         app:title="teste"
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:titleTextColor="@color/bg_register" />
+        app:titleTextColor="@color/bg_register"
+        tools:targetApi="lollipop" />
 
     <LinearLayout
 
@@ -43,8 +44,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/tb_detal_serv"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:weightSum="1">
 
@@ -58,14 +58,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:elevation="1dp"
                         android:gravity="right"
                         android:paddingBottom="5dp"
                         android:paddingRight="5dp"
                         android:paddingTop="5dp"
                         android:text="Status: "
                         android:textColor="#000"
-                        android:textSize="26sp"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -75,23 +74,52 @@
                         android:layout_weight="0.13"
                         android:text="Solicitando"
                         android:textColor="#000"
-                        android:textSize="26sp" />
+                        android:textSize="22sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:paddingBottom="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"
+                        android:text="Tipo Manutenção: "
+                        android:textColor="#000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvTipoManu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.13"
+                        android:text="Corretiva"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
                     <TextView
-                        android:id="@+id/text21"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="4dp"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:paddingTop="4dp"
@@ -103,7 +131,6 @@
                         android:id="@+id/dataView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
                         android:paddingRight="5dp"
                         android:paddingTop="5dp"
                         android:text="31/07/2017"
@@ -114,13 +141,21 @@
                         android:id="@+id/textView90"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="4dp"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:paddingTop="4dp"
                         android:text="ás"
                         android:textColor="@color/bg_register"
                         android:textSize="24sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <TextView
                         android:id="@+id/horaView"
@@ -132,6 +167,18 @@
                         android:text="13:00"
                         android:textColor="@color/bg_register"
                         android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/text21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="4dp"
+                        android:text="Horas"
+                        android:textColor="@color/bg_register"
+                        android:textSize="22sp" />
 
                 </LinearLayout>
 
@@ -166,7 +213,6 @@
                         android:id="@+id/tvComplem"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:elevation="1dp"
                         android:gravity="center"
                         android:paddingBottom="5dp"
                         android:paddingRight="5dp"
@@ -194,11 +240,10 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
-                    android:text="@string/descri_o_tecnica_do_problema"
+                    android:text="@string/descri_do_problema"
                     android:textColor="@color/lbl_name"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Descrição do Problema:" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvDescriCli"

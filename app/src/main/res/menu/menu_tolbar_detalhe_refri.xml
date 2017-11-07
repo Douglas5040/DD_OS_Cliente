@@ -10,8 +10,8 @@
         android:title="@string/action_edit_conta"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_salvar_refri"
-        android:icon="@drawable/ic_salve"
+        android:id="@+id/action_cancel_refri"
+        android:icon="@drawable/ic_cancel"
         android:orderInCategory="100"
         android:title="@string/action_edit_conta"
         app:showAsAction="always" />

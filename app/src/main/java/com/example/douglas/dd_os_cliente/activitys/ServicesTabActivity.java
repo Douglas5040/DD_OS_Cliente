@@ -137,7 +137,20 @@ public class ServicesTabActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_conta_services) {
+            Intent i = new Intent(getApplicationContext(), ContaActivity.class);  //your class
+            startActivity(i);
+            finish();
+            return true;
+        } if (id == R.id.action_Services_services) {
+            Intent i = new Intent(getApplicationContext(), ServicesTabActivity.class);  //your class
+            startActivity(i);
+            finish();
+            return true;
+        } if (id == R.id.action_refrigeradores_services) {
+            Intent i = new Intent(getApplicationContext(), RefrigeradorTabActivity.class);  //your class
+            startActivity(i);
+            finish();
             return true;
         }
         if (id == android.R.id.home) {
@@ -152,7 +165,8 @@ public class ServicesTabActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    public static class PlaceholderFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener,
+                                                                        AdapterView.OnItemLongClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -262,8 +276,9 @@ public class ServicesTabActivity extends AppCompatActivity {
 
                 try {
                     listRefrigeradoresCli = db.getAllArCli();
+                    Log.e(TAG,"Tamanho REfrigerador: "+listRefrigeradoresCli.get(0).toString());
                 }catch (Exception e){Log.e(TAG,"Error: "+e);}
-                if(listRefrigeradoresCli != null){
+                if(listRefrigeradoresCli.get(0).getId_refri() != 0){
                     for(int x = 0; x < listRefrigeradoresCli.size(); x++) {
                         List<String> refrigeraCli = new ArrayList<String>();
                         refrigeraCli.add(db.getNomeMaca(listRefrigeradoresCli.get(x).getMarca()) + " / " +
@@ -345,7 +360,7 @@ public class ServicesTabActivity extends AppCompatActivity {
 
                         Log.e(TAG,"Entrou fab");
                     if((rbPrev.isChecked() || rbCorre.isChecked()) && !editData.getText().toString().isEmpty() && !editHora.getText().toString().isEmpty() &&
-                            (spinnerArCli.getItemAtPosition(0).toString().equals("Nenhum Refrigerador Cadastrado")) && (rbEnderOther.isChecked() || rbEnderMy.isChecked()) &&
+                             !(spinnerArCli.getItemAtPosition(0).toString().equals("Nenhum Refrigerador Cadastrado")) && (rbEnderOther.isChecked() || rbEnderMy.isChecked()) &&
                             !editDEscriProb.getText().toString().isEmpty()) {
                         if (locationLati == null && locationLong == null) {
                             callConnetion();
@@ -374,12 +389,42 @@ public class ServicesTabActivity extends AppCompatActivity {
                         if (listRefrigeradoresCli == null) {
                             confirmCarRefrigerador();
                         } else {
-                            codRefriCli = listRefrigeradoresCli.get(spinnerArCli.getSelectedItemPosition() - 1).getId_refri();
-                            addServCli(locationLati, locationLong, clienteCtrl.getId(), ender, comple, data, editHora.getText().toString(),
-                                    editDEscriProb.getText().toString(), "Solicitando", tipoManu, codRefriCli);
+                            RefrigeradorCtrl refri = listRefrigeradoresCli.get(spinnerArCli.getSelectedItemPosition());
+                            addServCli(locationLati, locationLong, clienteCtrl.getId(), ender, comple,
+                                    data, editHora.getText().toString(),editDEscriProb.getText().toString(),
+                                    ""+db.getNomeModelo(refri.getTipo_modelo())+" - "
+                                        +db.getNomeBTU(refri.getCapaci_termica())+"BTUs, "
+                                        +refri.getNivel_econo()+" - "+refri.getPeso()+"Kg",
+                                    "Solicitando", tipoManu, refri.getId_refri());
                         }
                     }else{
-                        Toast.makeText(getContext(),"Preencha Todos os Dados!!!",Toast.LENGTH_LONG).show();
+                        if((spinnerArCli.getItemAtPosition(0).toString().equals("Nenhum Refrigerador Cadastrado")) ){
+                            Toast.makeText(getContext(),"CADASTRE UM REFRIGERADOR!!!",Toast.LENGTH_LONG).show();
+                            //Cria o gerador do AlertDialog
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            //define o titulo
+                            builder.setTitle("Sem Refrigerador");
+                            //define a mensagem
+                            builder.setIcon(R.drawable.ic_action_warning);
+                            builder.setMessage("Cadastre um Refrigerador para realizar um serviço!!!");
+                            //define um botão como positivo
+                            builder.setPositiveButton("OK",new DialogInterface.OnClickListener()
+
+                            {
+                                public void onClick (DialogInterface arg0, int arg1){
+
+                                    hideDialog();
+                                    RefrigeradorTabActivity.PlaceholderFragment.newInstance(2);
+                                    Intent it = new Intent(getContext(), RefrigeradorTabActivity.class);
+                                    startActivity(it);
+                                    getActivity().finish();
+                                }
+                            });
+                            //cria o AlertDialog
+                            alerta = builder.create();
+                            //Exibe
+                            alerta.show();
+                        }else Toast.makeText(getContext(),"Preencha Todos os Dados!!!",Toast.LENGTH_LONG).show();
                     }
                     }
                 });
@@ -488,12 +533,18 @@ public class ServicesTabActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 swipeRefreshLayout.setRefreshing(true);
-                                                listaServPen("",db.getUserDetails().getId());
+                                                servPens.clear();
+                                                servPens.addAll(db.getAllMyServPen());
+                                                listServApd.notifyDataSetChanged();
+                                                swipeRefreshLayout.setRefreshing(false);
+
+                                                //listaServPen("",db.getUserDetails().getId());
                                             }
                                         }
                 );
 
                 lvServPen.setOnItemClickListener(this);
+                lvServPen.setOnItemLongClickListener(this);
                 return rootView;
             }
         }
@@ -672,132 +723,8 @@ public class ServicesTabActivity extends AppCompatActivity {
                 pDialog.dismiss();
         }
 
-        private void listaServPen(final String status, final int cod_cli) {
-
-            // showing refresh animation before making http call
-            swipeRefreshLayout.setRefreshing(true);
-
-            // Tag used to cancel the request
-            String tag_string_req = "req_listaServPen";
-            //final List<ServPendenteCtrl> listSerPen =null;
-
-
-            StringRequest strReq = new StringRequest(Request.Method.POST,
-                    AppConfig.URL_SERV_PEN_CLI, new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String response) {
-                    Log.d(TAG, "Carregando dados: " + response.toString());
-
-
-                    try {
-                        JSONObject jObj = new JSONObject(response);
-                        boolean error = jObj.getBoolean("error");
-
-                        // Check for error node in json
-                        if (!error) {
-
-                            JSONArray serv_penArray = jObj.getJSONArray("data");
-
-                            Log.e("TESTE", "ENTROU: " + serv_penArray.length());
-                            servPens.clear();
-                            for (int i = 0; i < serv_penArray.length(); i++) {
-                                try {
-                                    JSONObject serv_penObj = new JSONObject(serv_penArray.get(i).toString());
-
-                                    Log.e("Serviço ENCONTRADO: ", "Entrou no for");
-
-                                    ServPendenteCtrl objetoServPen = new ServPendenteCtrl();
-
-                                    objetoServPen.setId_serv_pen(serv_penObj.getInt("uid"));
-                                    objetoServPen.setLatitude(Double.valueOf(serv_penObj.getString("latitude")));
-                                    objetoServPen.setLongitude(Double.valueOf(serv_penObj.getString("longitude")));
-                                    objetoServPen.setCliente_id(Integer.valueOf(serv_penObj.getString("cliente")));
-                                    objetoServPen.setLotacionamento(serv_penObj.getString("lotacionamento"));
-                                    objetoServPen.setEnder(serv_penObj.getString("ender"));
-                                    objetoServPen.setComplemento(serv_penObj.getString("complemento"));
-                                    objetoServPen.setCep(serv_penObj.getString("cep"));
-                                    objetoServPen.setData_serv(serv_penObj.getString("data_serv"));
-                                    objetoServPen.setHora_serv(serv_penObj.getString("hora_serv"));
-                                    objetoServPen.setDescri_cli_problem(serv_penObj.getString("descriCliProblem"));
-                                    objetoServPen.setDescri_tecni_problem(serv_penObj.getString("descriTecniProblem"));
-                                    objetoServPen.setDescri_cli_refrigera(serv_penObj.getString("descriCliRefrigera"));
-                                    objetoServPen.setStatus_serv(serv_penObj.getString("statusServ"));
-                                    objetoServPen.setNomeCli(serv_penObj.getString("nome"));
-                                    objetoServPen.setTipoCli(serv_penObj.getString("tipo"));
-                                    objetoServPen.setFone1(serv_penObj.getString("fone1"));
-                                    objetoServPen.setFone2(serv_penObj.getString("fone2"));
-                                    objetoServPen.setId_refriCli(serv_penObj.getInt("id_refriCli"));
-
-                                    servPens.add(objetoServPen);
-                                    swipeRefreshLayout.setRefreshing(false);
-                                    Log.e("LISTA", "" + servPens.size());
-                                    Log.e("Dados sqlite: ", "" + db.getAllMyServPen().size());
-                                } catch (JSONException e) {
-                                    Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
-                                }
-                            }
-                            listServApd.notifyDataSetChanged();
-
-
-                        } else {
-                            // Error in login. Get the error message
-                            String errorMsg = jObj.getString("error_list");
-                            Toast.makeText(getContext(), "Erro AQUI " + errorMsg, Toast.LENGTH_LONG).show();
-                            swipeRefreshLayout.setRefreshing(false);
-
-                        }
-                    } catch (JSONException e) {
-                        // JSON error
-                        e.printStackTrace();
-                        Log.e("ERRORRRRR", "Json error: " + e.getMessage());
-                        Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        swipeRefreshLayout.setRefreshing(false);
-
-                    }
-                    // stopping swipe refresh
-                    swipeRefreshLayout.setRefreshing(false);
-
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Lista Service Error: " + error.getMessage());
-                    ServPendenteCtrl objetoServPen = new ServPendenteCtrl();
-                    objetoServPen.setTipoCli(":SEM SERVIÇOS PENDENTES NO MOMENTO");
-                    objetoServPen.setData_serv("");
-                    objetoServPen.setHora_serv("");
-                    objetoServPen.setEnder("");
-                    objetoServPen.setNomeCli("  ");
-                    objetoServPen.setId_serv_pen(-1);
-
-                    servPens.add(objetoServPen);
-                    // stopping swipe refresh
-
-                    listServApd.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting parameters to login url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("status", status);
-                    params.put("cliente", "" + cod_cli);
-                    return params;
-                }
-
-            };
-
-            // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-        }
-
         private void addServCli(final Double lati, final Double longi, final int cli, final String ender, final String comple, final String data,
-                                final String hora, final String descriCliPro, final String status, final int tipoManu, final int codRefriCli) {
+                                final String hora, final String descriCliPro, final String descriAr, final String status, final int tipoManu, final int codRefriCli) {
 
 
             // Tag used to cancel the request
@@ -818,7 +745,26 @@ public class ServicesTabActivity extends AppCompatActivity {
                         if (!error) {
 
                             Log.e(TAG, " SERVIÇO INSERIDO COM SUCESSO ");
+                            ServPendenteCtrl servPen = new ServPendenteCtrl();
+                            servPen.setId_serv_pen(jObj.getInt("return"));
+                            servPen.setLatitude(lati);
+                            servPen.setLongitude(longi);
+                            servPen.setCliente_id(cli);
+                            servPen.setEnder(ender);
+                            servPen.setData_serv(data);
+                            servPen.setHora_serv(hora);
+                            servPen.setDescri_cli_problem(descriCliPro);
+                            servPen.setTipoManu(tipoManu);
+                            servPen.setId_refriCli(codRefriCli);
+                            servPen.setDescri_cli_refrigera(descriAr);
+                            servPen.setStatus_serv(status);
+                            db.addMyServPen(servPen);
 
+
+
+                            getActivity().finish();
+                            Intent it = new Intent(getContext(), ServicesTabActivity.class);
+                            startActivity(it);
 
                         } else {
                             // Error in login. Get the error message
@@ -831,8 +777,6 @@ public class ServicesTabActivity extends AppCompatActivity {
                         Log.e("ERRORRRRR", "Json error: " + e.getMessage());
                         Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                    // stopping swipe refresh
-                    swipeRefreshLayout.setRefreshing(false);
 
                 }
             }, new Response.ErrorListener() {
@@ -857,6 +801,7 @@ public class ServicesTabActivity extends AppCompatActivity {
                     params.put("data", data);
                     params.put("hora", hora);
                     params.put("descriCliPro", descriCliPro);
+                    params.put("descriRefrige", descriAr);
                     params.put("status", status);
                     params.put("tipoManu", ""+tipoManu);
                     params.put("codRefriCli", ""+codRefriCli);
@@ -871,21 +816,127 @@ public class ServicesTabActivity extends AppCompatActivity {
 
         }
 
+
+        private void updateStatus(final int id_serv, final String new_status) {
+            Log.d(TAG, ">>>>>>>: "+id_serv +" -- "+new_status );
+            // Tag used to cancel the request
+            String tag_string_req = "req_new_status";
+
+
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    AppConfig.URL_UPDATE_STATUS, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "Update Status Response: " + response.toString());
+
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean("error");
+
+                        // Check for error node in json
+                        if (!error) {
+
+                            Log.e("Update Status: ", "Status Atualizado com sucesso!!!" );
+                        } else {
+                            // Error in login. Get the error message
+                            Log.e("Errro in new Status: ", "Erro ao atualizar novo status!!!" );
+                            String errorMsg = jObj.getString("error_msg");
+                            Toast.makeText(getContext(),
+                                    errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        // JSON error
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "New Status Error: " + error.getMessage());
+                    Toast.makeText(getContext(),
+                            "Erro ao ATUALIZAÇÃO DO STATUS", Toast.LENGTH_LONG).show();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("id_serv", String.valueOf(id_serv));
+                    params.put("newStatus", new_status);
+
+                    return params;
+                }
+
+            };
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        }
+
+
+        private void confirmCancelServ(final ServPendenteCtrl servPen, final int position){
+            //Cria o gerador do AlertDialog
+            db = new SQLiteHandler(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+            //define o titulo
+            builder.setTitle("Confirmar Cancelamento de Serviço");
+            //define a mensagem
+            builder.setMessage("Você deseja Cancelar este Serviço?");
+            //define um botão como positivo
+            builder.setPositiveButton("Sim",new DialogInterface.OnClickListener()
+
+            {
+                public void onClick (DialogInterface arg0, int arg1){
+                    //Toast.makeText(getApplicationContext(), "positivo=" + arg1, Toast.LENGTH_SHORT).show();
+                    updateStatus(servPen.getId_serv_pen(), "Cancelado");
+                    db.deleteMyServPen(servPen.getId_serv_pen());
+
+                    servPens.remove(position);
+                    listServApd.notifyDataSetChanged();
+
+
+                }
+            });
+            //define um botão como negativo.
+            builder.setNegativeButton("Não",new DialogInterface.OnClickListener()
+
+            {
+                public void onClick (DialogInterface arg0, int arg1){
+                    Toast.makeText(getContext(), "negativo=" + arg1, Toast.LENGTH_SHORT).show();
+                }
+            });
+            //cria o AlertDialog
+            alerta = builder.create();
+            //Exibe
+            alerta.show();
+        }
+
         @Override
         public void onRefresh() {
-            listaServPen("",db.getUserDetails().getId());
+
+            swipeRefreshLayout.setRefreshing(true);
+            servPens.clear();
+            servPens.addAll(db.getAllMyServPen());
+            listServApd.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
         }
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            if((adapterView.getAdapter().getItemId(position) != -1) && !alerta.isShowing()) {
+            if((adapterView.getAdapter().getItemId(position) != -1) && !alerta.isShowing() && servPens.get(position).getId_serv_pen() != 0) {
                 servPenPosition = (int) adapterView.getAdapter().getItemId(position);
                 servMyPen = servPens.get(position);
                 Toast.makeText(getContext(), "ServPen position: " + servPenPosition, Toast.LENGTH_LONG).show();
                 Log.e("Click lista ", "Posição do click" + servPenPosition);
                 Intent it = new Intent(getContext(), DetalheServPenActivity.class);
                 startActivity(it);
-                //getActivity().finish();
+                getActivity().finish();
             }
         }
 
@@ -992,6 +1043,18 @@ public class ServicesTabActivity extends AppCompatActivity {
         }
 
 
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            if(adapterView.getAdapter().getItemId(position) != -1 && servPens.get(position).getId_serv_pen() != 0) {
+                //lvMyServ.removeViewAt(position);
+                confirmCancelServ(servPens.get(position), position);
+
+
+            }
+            Log.e("Click Longo lista ", "Posição do click" + position);
+            return true;
+        }
     }
 
 

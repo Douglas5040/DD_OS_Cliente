@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/colorPrimary"
@@ -13,31 +14,32 @@
         android:layout_marginTop="30dp"
         android:layout_weight="0.69"
         android:orientation="vertical"
-        android:weightSum="1">
+        android:weightSum="1"
+        tools:ignore="InefficientWeight">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageViewPrinc"
             android:layout_width="match_parent"
-            android:layout_height="304dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/main_efrigerador" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:background="@drawable/main_efrigerador"
+            android:contentDescription=""
+            tools:ignore="ContentDescription" />
 
         <Button
             android:id="@+id/buttonSwitcImg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:layout_weight="0.46"
+            android:layout_weight="1.07"
             android:background="@android:drawable/alert_dark_frame"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="Autenticar Serviço"
             android:textColor="@color/white"
-            android:textColorLink="@color/card_background" />
+            android:textColorLink="@color/card_background"
+            android:textSize="17sp"
+            tools:ignore="NestedWeights" />
 
     </LinearLayout>
 
@@ -55,27 +57,27 @@
             android:background="?android:attr/selectableItemBackground"
             android:drawableTop="@drawable/conta"
             android:drawingCacheQuality="high"
-            android:elevation="0dp"
             android:paddingTop="10dp"
             android:pointerIcon="hand"
             android:text="Conta"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            tools:targetApi="n" />
 
         <Button
             android:id="@+id/btnRefri"
-            android:layout_width="105dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.20"
             android:background="?android:attr/selectableItemBackground"
             android:drawableTop="@drawable/icone_refri_preto"
             android:drawingCacheQuality="high"
-            android:elevation="0dp"
-            android:paddingTop="25dp"
+            android:paddingTop="30dp"
             android:pointerIcon="hand"
             android:text="Refrigeradores"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            tools:targetApi="n" />
 
         <Button
             android:id="@+id/btnServ"
@@ -86,12 +88,11 @@
             android:background="?android:attr/selectableItemBackground"
             android:drawableTop="@drawable/icon_service"
             android:drawingCacheQuality="high"
-            android:elevation="0dp"
             android:paddingTop="10dp"
             android:pointerIcon="hand"
             android:text="Serviços"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 
