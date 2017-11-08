@@ -6,6 +6,8 @@ public class AppConfig {
 
     public static String URL_LOGIN = "http://"+constantIP+"/android_login_api/loginCliente.php";
 
+    public static String URL_SAVE_TOKEN = "http://"+constantIP+"/android_login_api/saveToken.php";
+
     public static String URL_VERIFY_USER = "http://"+constantIP+"/android_login_api/verifyCliExist.php";
 
     public static String URL_EDIT_USER = "http://"+constantIP+"/android_login_api/alterarDetalhesUser.php";

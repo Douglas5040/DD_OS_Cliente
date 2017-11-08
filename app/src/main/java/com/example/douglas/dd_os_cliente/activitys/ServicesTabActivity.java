@@ -227,6 +227,7 @@ public class ServicesTabActivity extends AppCompatActivity {
         private UserClienteCtrl clienteCtrl;
         private RefrigeradorCtrl refrigeradorCli;
         private List <RefrigeradorCtrl> listRefrigeradoresCli;
+        private boolean swipPost;
 
         String ender;
         String comple;
@@ -512,6 +513,9 @@ public class ServicesTabActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 alerta = builder.create();
 
+                // Progress dialog
+                pDialog = new ProgressDialog(getContext());
+                pDialog.setCancelable(false);
 
                 db = new SQLiteHandler(getContext());
 
@@ -524,24 +528,13 @@ public class ServicesTabActivity extends AppCompatActivity {
 
                 swipeRefreshLayout.setOnRefreshListener(this);
 
-                /**
-                 * Showing Swipe Refresh animation on activity create
-                 * As animation won't start on onCreate, post runnable is used
-                 */
-                //listaServPen();
-                swipeRefreshLayout.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                swipeRefreshLayout.setRefreshing(true);
-                                                servPens.clear();
-                                                servPens.addAll(db.getAllMyServPen());
-                                                listServApd.notifyDataSetChanged();
-                                                swipeRefreshLayout.setRefreshing(false);
+                Log.e(TAG, "OnRefresh sem swipe ---------------");
+                swipeRefreshLayout.setRefreshing(true);
+                servPens.clear();
+                servPens.addAll(db.getAllMyServPen());
+                listServApd.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
 
-                                                //listaServPen("",db.getUserDetails().getId());
-                                            }
-                                        }
-                );
 
                 lvServPen.setOnItemClickListener(this);
                 lvServPen.setOnItemLongClickListener(this);
@@ -917,14 +910,128 @@ public class ServicesTabActivity extends AppCompatActivity {
             alerta.show();
         }
 
+        private void listaServPen(final String status, final int cod_cli) {
+
+            // Tag used to cancel the request
+            String tag_string_req = "req_listaServPen";
+            //final List<ServPendenteCtrl> listSerPen =null;
+            pDialog.setTitle("Atualizando...");
+            showDialog();
+
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    AppConfig.URL_SERV_PEN_CLI, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.e(TAG, "Carregando dados: " + response.toString());
+
+
+                    try {
+                        JSONObject jObj = new JSONObject(response);
+                        boolean error = jObj.getBoolean("error");
+
+                        db.deleteAllMyServPen();
+                        servPens.clear();
+                        // Check for error node in json
+                        if (!error) {
+                            JSONArray serv_penArray = jObj.getJSONArray("data");
+
+                            for (int i = 0; i < serv_penArray.length(); i++) {
+                                try {
+                                    JSONObject serv_penObj = new JSONObject(serv_penArray.get(i).toString());
+
+
+                                    ServPendenteCtrl objetoServPen = new ServPendenteCtrl();
+
+                                    objetoServPen.setId_serv_pen(serv_penObj.getInt("uid"));
+                                    objetoServPen.setLatitude(Double.valueOf(serv_penObj.getString("latitude")));
+                                    objetoServPen.setLongitude(Double.valueOf(serv_penObj.getString("longitude")));
+                                    objetoServPen.setCliente_id(Integer.valueOf(serv_penObj.getString("cliente")));
+                                    objetoServPen.setLotacionamento(serv_penObj.getString("lotacionamento"));
+                                    objetoServPen.setEnder(serv_penObj.getString("ender"));
+                                    objetoServPen.setComplemento(serv_penObj.getString("complemento"));
+                                    objetoServPen.setCep(serv_penObj.getString("cep"));
+                                    objetoServPen.setData_serv(serv_penObj.getString("data_serv"));
+                                    objetoServPen.setHora_serv(serv_penObj.getString("hora_serv"));
+                                    objetoServPen.setDescri_cli_problem(serv_penObj.getString("descriCliProblem"));
+                                    objetoServPen.setDescri_tecni_problem(serv_penObj.getString("descriTecniProblem"));
+                                    objetoServPen.setDescri_cli_refrigera(serv_penObj.getString("descriCliRefrigera"));
+                                    objetoServPen.setStatus_serv(serv_penObj.getString("statusServ"));
+                                    objetoServPen.setNomeCli(serv_penObj.getString("nome"));
+                                    objetoServPen.setTipoCli(serv_penObj.getString("tipo"));
+                                    objetoServPen.setFone1(serv_penObj.getString("fone1"));
+                                    objetoServPen.setFone2(serv_penObj.getString("fone2"));
+                                    objetoServPen.setId_refriCli(serv_penObj.getInt("id_refriCli"));
+
+                                    if(!objetoServPen.getStatus_serv().equals("Cancelado")){
+                                        servPens.add(objetoServPen);
+                                        db.addMyServPen(objetoServPen);
+                                    }
+                                    Log.e("Dados sqlite: ", "" + db.getAllMyServPen().size());
+
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
+                                }
+                            }
+
+                            listServApd.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
+                            hideDialog();
+
+                        } else {
+                            // Error in login. Get the error message
+                            String errorMsg = jObj.getString("error_list");
+                            Toast.makeText(getContext(), "Menssagem " + errorMsg, Toast.LENGTH_LONG).show();
+                            swipeRefreshLayout.setRefreshing(false);
+                            hideDialog();
+
+
+                        }
+                    } catch (JSONException e) {
+                        // JSON error
+                        e.printStackTrace();
+                        Log.e("ERRORRRRR", "Json error: " + e.getMessage());
+                        Toast.makeText(getContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        swipeRefreshLayout.setRefreshing(false);
+                        hideDialog();
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Lista Service Error: " + error.getMessage());
+                    swipeRefreshLayout.setRefreshing(false);
+                    hideDialog();
+
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("status", status);
+                    params.put("cliente", "" + cod_cli);
+                    return params;
+                }
+
+            };
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+        }
+
         @Override
         public void onRefresh() {
 
-            swipeRefreshLayout.setRefreshing(true);
-            servPens.clear();
-            servPens.addAll(db.getAllMyServPen());
-            listServApd.notifyDataSetChanged();
-            swipeRefreshLayout.setRefreshing(false);
+                listaServPen("", db.getUserDetails().getId());
+
+
+
         }
 
         @Override

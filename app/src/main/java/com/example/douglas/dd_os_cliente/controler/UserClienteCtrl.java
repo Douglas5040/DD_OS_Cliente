@@ -24,12 +24,13 @@ public class UserClienteCtrl implements Serializable {
     private int cep;
     private String created_at;
     private String update_at;
+    private String token;
 
     public UserClienteCtrl() {
     }
 
     public UserClienteCtrl(int id, String name, String email, int cpf_cnpj, String uid, String created_at, String fone1, String fone2,
-                           String ender, String senha, String bairro, String point_ref, int cep, String update_at) {
+                           String ender, String senha, String token,  String bairro, String point_ref, int cep, String update_at) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -44,6 +45,15 @@ public class UserClienteCtrl implements Serializable {
         this.point_ref = point_ref;
         this.cep = cep;
         this.ender = ender;
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getSenha() {

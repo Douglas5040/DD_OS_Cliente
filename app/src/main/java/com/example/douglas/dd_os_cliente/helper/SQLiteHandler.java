@@ -28,7 +28,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
-	private static final int DATABASE_VERSION = 55;
+	private static final int DATABASE_VERSION = 58;
 
 	// Database Name
 	private static final String DATABASE_NAME = "android_api";
@@ -115,6 +115,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	private static final String KEY_BAIRRO = "bairro";
 	private static final String KEY_POINT_REF = "point_ref";
 	private static final String KEY_CEP_CLI = "cep";
+	private static final String KEY_TOKEN = "token_cli";
+
 
 	// GUARDA DADOS ORDEM SERVICE Table Columns names
 	private static final String KEY_ID_CLI_CACHE = "id_cli_cache";
@@ -210,7 +212,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 					+ KEY_FOTO1 + " longblob,"
 					+ KEY_FOTO2 + " longblob,"
 					+ KEY_FOTO3 + " longblob,"
-					+ KEY_ID_CLIENTE_AR + " INT" + ");";
+					+ KEY_ID_CLIENTE_AR + " INT );";
 
 	String CREATE_TABLE_USER_CLI =
 			"CREATE TABLE " + TABLE_USER_CLI + "("
@@ -227,7 +229,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 					+ KEY_POINT_REF+ " TEXT,"
 					+ KEY_CEP_CLI+ " INT,"
 					+ KEY_UPDATE_AT+ " TEXT,"
-					+ KEY_CREATED_AT + " TEXT" + ");";
+					+ KEY_CREATED_AT + " TEXT,"
+					+ KEY_TOKEN + " VARCHAR(170) );";
 
 	String CREATE_TABLE_OS =
 			"CREATE TABLE " + TABLE_OS + "("
@@ -428,6 +431,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		values.put(KEY_BAIRRO, user.getBairro()); // created_at
 		values.put(KEY_POINT_REF, user.getPoint_ref()); // created_at
 		values.put(KEY_CEP_CLI, user.getCep()); // created_at
+		values.put(KEY_TOKEN, user.getToken()); // created_at
 
 		// Inserting Row
 		long id = db.insert(TABLE_USER_CLI, null, values);
@@ -696,6 +700,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 			user.setPoint_ref(cursor.getString(10));
 			user.setCep(Integer.parseInt(cursor.getString(11)));
 			user.setCreated_at(cursor.getString(12));
+			user.setToken(cursor.getString(13));
 		}
 		cursor.close();
 		db.close();

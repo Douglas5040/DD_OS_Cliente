@@ -28,6 +28,8 @@ import com.example.douglas.dd_os_cliente.controler.ServicesCtrl;
 import com.example.douglas.dd_os_cliente.controler.UserClienteCtrl;
 import com.example.douglas.dd_os_cliente.helper.SQLiteHandler;
 import com.example.douglas.dd_os_cliente.helper.SessionManager;
+import com.example.douglas.dd_os_cliente.modelos.SPUtil;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +75,7 @@ public class LoginActivity extends Activity {
         session = new SessionManager(getApplicationContext());
 
         // Check if user is already logged in or not
-        if (session.isLoggedIn()) {
+        if (session.isLoggedIn() && db.getUserDetails().getId() != 0) {
             // User is already logged in. Take him to main activity
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -158,6 +160,11 @@ public class LoginActivity extends Activity {
                         userCli.setCreated_at(user.getString("created_at"));
                         userCli.setUpdate_at(user.getString("updated_at"));
 
+                        String token = FirebaseInstanceId.getInstance().getToken();
+                        userCli.setToken(token);
+                        inserirToken(userCli.getId(),  token);
+                        SPUtil.saveStatusTokenServer( LoginActivity.this, false );
+
 
                         // Inserting row in users table
                         db.deleteUsers();
@@ -221,6 +228,64 @@ public class LoginActivity extends Activity {
     }
 
 
+
+    private void inserirToken(final int id, final String token) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_register_token";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_SAVE_TOKEN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Register Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+
+                    } else {
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                "Erro token: "+errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id_cli", ""+id);
+                params.put("token", token);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 
     private void listaServPen(final String status, final int cod_cli) {
 

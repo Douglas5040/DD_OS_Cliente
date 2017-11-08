@@ -134,7 +134,7 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
             //Inicializando o QRcode zxing
             IntentIntegrator integrator = new IntentIntegrator(RefrigeradorTabActivity.this);
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-            integrator.setPrompt("Ler um QRcode");
+            integrator.setPrompt("Lendo QRcode do Refrigerador!!!");
             integrator.setCameraId(0);  // Use a specific camera of the device
             integrator.setBeepEnabled(true);
             integrator.setBarcodeImageEnabled(true);
