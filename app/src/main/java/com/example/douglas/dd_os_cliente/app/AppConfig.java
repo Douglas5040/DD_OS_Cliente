@@ -2,7 +2,7 @@ package com.example.douglas.dd_os_cliente.app;
 
 public class AppConfig {
 	// Server user login url
-	static String constantIP = "192.168.0.128";
+	static String constantIP = "192.168.1.4";
 
     public static String URL_LOGIN = "http://"+constantIP+"/android_login_api/loginCliente.php";
 

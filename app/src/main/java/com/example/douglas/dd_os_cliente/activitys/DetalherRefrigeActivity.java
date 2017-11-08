@@ -212,38 +212,39 @@ public class DetalherRefrigeActivity extends AppCompatActivity {
                 editTempoUso.setText("" + refrigerador.getTemp_uso());
                 editPeso.setText("" + refrigerador.getPeso());
                 editLotacionamento.setText("" + refrigerador.getLotacionamento());
-            } 
+            }
         }else{
             RefrigeradorCtrl refri = db.getArCli(RefrigeradorTabActivity.idQRCode);
             refrigerador = refri;
-
-            if(refrigerador != null){
+            Log.e(TAG,"REfrigerador QRcode: --"+refrigerador.toString());
+            if(refrigerador.getId_refri() != 0){
                 if (db.verifyRefriService(refri.getId_refri())) {
                     ServPendenteCtrl service = db.getServiveRefri(refrigerador.getId_refri());
                     dataServRefri.setText(service.getData_serv());
                     horaServRefri.setText(service.getHora_serv());
                     statusServRefri.setText(service.getStatus_serv());
-
-                    if(refrigerador.getHas_exaustor() == 1) checkBoxExaustor.setChecked(true);
-                    else checkBoxExaustor.setChecked(false);
-
-                    if(refrigerador.getHas_control() == 1) checkBoxControl.setChecked(true);
-                    else checkBoxControl.setChecked(false);
-
-                    if(refrigerador.getHas_timer() == 1) checkTimer.setChecked(true);
-                    else checkTimer.setChecked(false);
-
-                    spinnerMarca.setSelection(refrigerador.getMarca() - 1);
-                    spinnerModelo.setSelection(refrigerador.getTipo_modelo() - 1);
-                    spinnerTensao.setSelection(refrigerador.getTencao_tomada() - 1);
-                    spinnerLvlEcon.setSelection(refrigerador.getNivel_econo() - 1);
-                    spinnerBTU.setSelection(refrigerador.getCapaci_termica() - 1);
-
-                    editTamanho.setText(refrigerador.getTamanho());
-                    editTempoUso.setText("" + refrigerador.getTemp_uso());
-                    editPeso.setText("" + refrigerador.getPeso());
-                    editLotacionamento.setText("" + refrigerador.getLotacionamento());
                 }
+
+                if(refrigerador.getHas_exaustor() == 1) checkBoxExaustor.setChecked(true);
+                else checkBoxExaustor.setChecked(false);
+
+                if(refrigerador.getHas_control() == 1) checkBoxControl.setChecked(true);
+                else checkBoxControl.setChecked(false);
+
+                if(refrigerador.getHas_timer() == 1) checkTimer.setChecked(true);
+                else checkTimer.setChecked(false);
+
+                spinnerMarca.setSelection(refrigerador.getMarca() - 1);
+                spinnerModelo.setSelection(refrigerador.getTipo_modelo() - 1);
+                spinnerTensao.setSelection(refrigerador.getTencao_tomada() - 1);
+                spinnerLvlEcon.setSelection(refrigerador.getNivel_econo() - 1);
+                spinnerBTU.setSelection(refrigerador.getCapaci_termica() - 1);
+
+                editTamanho.setText(refrigerador.getTamanho());
+                editTempoUso.setText("" + refrigerador.getTemp_uso());
+                editPeso.setText("" + refrigerador.getPeso());
+                editLotacionamento.setText("" + refrigerador.getLotacionamento());
+
             }else{
                 getRefrigeradorServer(RefrigeradorTabActivity.idQRCode);
             }
@@ -270,8 +271,9 @@ public class DetalherRefrigeActivity extends AppCompatActivity {
             finish();
         }
         if (id == R.id.action_editar_refri) {
-            item.setIcon(R.drawable.ic_salve);
             if(editLotacionamento.isEnabled()){
+                item.setIcon(R.drawable.ic_salve);
+
                     RefrigeradorCtrl arCli = new RefrigeradorCtrl();
 
                     arCli.setId_refri(refrigerador.getId_refri());
@@ -294,29 +296,31 @@ public class DetalherRefrigeActivity extends AppCompatActivity {
                     arCli.setLotacionamento(editLotacionamento.getText().toString());
 
                     editarArCliBD(arCli);
-            }
-            checkBoxExaustor.setEnabled(true);
-            checkBoxControl.setEnabled(true);
-            checkTimer.setEnabled(true);
-            spinnerMarca.setEnabled(true);
-            spinnerModelo.setEnabled(true);
-            spinnerTensao.setEnabled(true);
-            spinnerLvlEcon.setEnabled(true);
-            spinnerBTU.setEnabled(true);
-            editTamanho.setEnabled(true);
-            editTempoUso.setEnabled(true);
-            editPeso.setEnabled(true);
-            editLotacionamento.setEnabled(true);
 
+            }else if(refrigerador.getId_cliente() == db.getUserDetails().getId()) {
+                checkBoxExaustor.setEnabled(true);
+                checkBoxControl.setEnabled(true);
+                checkTimer.setEnabled(true);
+                spinnerMarca.setEnabled(true);
+                spinnerModelo.setEnabled(true);
+                spinnerTensao.setEnabled(true);
+                spinnerLvlEcon.setEnabled(true);
+                spinnerBTU.setEnabled(true);
+                editTamanho.setEnabled(true);
+                editTempoUso.setEnabled(true);
+                editPeso.setEnabled(true);
+                editLotacionamento.setEnabled(true);
+            }else Toast.makeText(getApplicationContext(),"Sem Permissão para Edição!!!",Toast.LENGTH_LONG).show();
 
         }if (id == R.id.action_cancel_refri) {
 
-
-            if (!db.verifyRefriService(refrigerador.getId_refri())){
-                confirmDeleteRefri(refrigerador);
-            }else{
-                Toast.makeText(getApplicationContext(),"Você tem um Serviço Pendente para este Refrigerador!!!",Toast.LENGTH_LONG).show();
-            }
+            if(refrigerador.getId_cliente() == db.getUserDetails().getId()) {
+                if (!db.verifyRefriService(refrigerador.getId_refri())) {
+                    confirmDeleteRefri(refrigerador);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Você tem um Serviço Pendente para este Refrigerador!!!", Toast.LENGTH_LONG).show();
+                }
+            }else Toast.makeText(getApplicationContext(),"Sem Permissão para Excluir!!!",Toast.LENGTH_LONG).show();
         }
 
         return true;
@@ -370,22 +374,26 @@ public class DetalherRefrigeActivity extends AppCompatActivity {
                                 objetoRefrigerador.setTipo_modelo(refrigeraObj.getInt("tipo_modelo"));
                                 objetoRefrigerador.setNivel_econo(refrigeraObj.getInt("nivel_econo"));
                                 objetoRefrigerador.setTencao_tomada(refrigeraObj.getInt("tencao_tomada"));
-                                objetoRefrigerador.setId_cliente(refrigeraObj.getInt("id_cliente"));
+                                objetoRefrigerador.setId_cliente(refrigeraObj.getInt("cliente"));
                                 objetoRefrigerador.setTemp_uso(refrigeraObj.getInt("temp_uso"));
                                 objetoRefrigerador.setTamanho(refrigeraObj.getString("tamanho"));
                                 objetoRefrigerador.setSaida_ar(refrigeraObj.getString("saida_ar"));
 
-                                if(refrigeraObj.getString("statusServ") != "Cancelado"){
+
                                     objetoServPen.setId_serv_pen(refrigeraObj.getInt("id_serv_pen"));
-                                    objetoServPen.setLotacionamento(refrigeraObj.getString("cliente"));
+                                    objetoServPen.setLotacionamento(refrigeraObj.getString("lotacionamento"));
                                     objetoServPen.setData_serv(refrigeraObj.getString("data_serv"));
                                     objetoServPen.setHora_serv(refrigeraObj.getString("hora_serv"));
                                     objetoServPen.setStatus_serv(refrigeraObj.getString("statusServ"));
-                                }
+                                    //setando dados nos views
+                                    dataServRefri.setText(objetoServPen.getData_serv());
+                                    horaServRefri.setText(objetoServPen.getHora_serv());
+                                    statusServRefri.setText(objetoServPen.getStatus_serv());
+
 
 
                                 Log.e("Refrigerador: ", objetoRefrigerador.getId_cliente() + " " + refrigeraObj.getInt("marca"));
-
+                                hideDialog();
                             } catch (JSONException e) {
                                 Log.e(TAG, "JSON erro ao consultar dados: " + e.getMessage());
 
@@ -394,9 +402,6 @@ public class DetalherRefrigeActivity extends AppCompatActivity {
                             }
                         }
 
-                        dataServRefri.setText(objetoServPen.getData_serv());
-                        horaServRefri.setText(objetoServPen.getHora_serv());
-                        statusServRefri.setText(objetoServPen.getStatus_serv());
 
                         spinnerMarca.setSelection(objetoRefrigerador.getMarca() - 1);
                         spinnerModelo.setSelection(objetoRefrigerador.getTipo_modelo() - 1);

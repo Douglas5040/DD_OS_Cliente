@@ -30,11 +30,11 @@
         <Button
             android:id="@+id/buttonSwitcImg"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1.07"
             android:background="@android:drawable/alert_dark_frame"
-            android:padding="5dp"
+            android:padding="10dp"
             android:text="Autenticar Serviço"
             android:textColor="@color/white"
             android:textColorLink="@color/card_background"

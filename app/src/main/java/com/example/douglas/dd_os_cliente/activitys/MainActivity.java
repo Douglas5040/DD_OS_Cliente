@@ -25,6 +25,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.douglas.dd_os_cliente.R;
 import com.example.douglas.dd_os_cliente.app.AppConfig;
 import com.example.douglas.dd_os_cliente.app.AppController;
+import com.example.douglas.dd_os_cliente.helper.SQLiteHandler;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +38,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity{
+    public static String TAG = MainActivity.class.getName();
     private ProgressDialog dialog = null;
     private Button btnselectpic;
     private Button btnConta;
@@ -39,6 +46,9 @@ public class MainActivity extends AppCompatActivity{
     private Button btnServ;
     private AlertDialog alerta;
     ImageView img;
+
+    private Bitmap qrCode;
+    private SQLiteHandler db;
     private static int REQCODE = 12;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,41 +61,49 @@ public class MainActivity extends AppCompatActivity{
 
         img = (ImageView) findViewById(R.id.imageViewPrinc);
 
-        img = (ImageView) findViewById(R.id.imageView);
+        //img = (ImageView) findViewById(R.id.imageView);
         dialog = new ProgressDialog(this);
         dialog.setCancelable(true);
+
+        db = new SQLiteHandler(this);
 
         btnselectpic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Autenticar Serviço: QRCode",Toast.LENGTH_LONG).show();
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplication());
-//                //define o titulo
-//                builder.setTitle("AUTENTICANDO SERVIÇO");
-//                //define a mensagem
-//
-//                //builder.setIcon(R.drawable.ic_action_warning);
-//                //builder.setMessage("Cadastre um Refrigerador para realizar um serviço!!!");
-//                //builder.setView(btnConta);
-//                //define um botão como positivo
-//                builder.setPositiveButton("OK",new DialogInterface.OnClickListener()
-//
-//                {
-//                    public void onClick (DialogInterface arg0, int arg1){
-//
-//
-//                    }
-//                });
-//                //cria o AlertDialog
-//                alerta = builder.create();
-//                //Exibe
-//                alerta.show();
-                //dialog.setMessage("Uploading Image...");
+                //gerar QRcode
+                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                try{
+                    BitMatrix bitMatrix = multiFormatWriter.encode(""+db.getUserDetails().getId(), BarcodeFormat.QR_CODE, 200,200);
+                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                    qrCode = barcodeEncoder.createBitmap(bitMatrix);
+                    qrCode.setDensity(100);
+                }catch (WriterException e){
+                    Log.e(TAG, "EXCEÇÃO: "+e);
+                }
 
-                dialog.setTitle("teste");
-                dialog.setIcon(R.drawable.android);
-                dialog.setFeatureDrawableResource(0, R.drawable.refrigerador_icone);
-                dialog.show();
+                Toast.makeText(getApplicationContext(),"Autenticar Serviço: QRCode",Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                //define o titulo
+                builder.setTitle("AUTENTICANDO SERVIÇO");
+                //define a mensagem
+
+                //builder.setMessage("Cadastre um Refrigerador para realizar um serviço!!!");
+                ImageView img = new ImageView(MainActivity.this);
+                img.setImageBitmap(qrCode);
+                img.setAdjustViewBounds(true);
+                builder.setView(img);
+                //define um botão como positivo
+                builder.setPositiveButton("OK",new DialogInterface.OnClickListener()
+
+                {
+                    public void onClick (DialogInterface arg0, int arg1){
+
+
+                    }
+                });
+                alerta = builder.create();
+                alerta.show();
+
             }
         });
         ;

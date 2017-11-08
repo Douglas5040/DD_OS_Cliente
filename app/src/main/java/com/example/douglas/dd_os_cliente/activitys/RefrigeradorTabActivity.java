@@ -43,6 +43,8 @@ import com.example.douglas.dd_os_cliente.app.AppController;
 import com.example.douglas.dd_os_cliente.controler.RefrigeradorCtrl;
 import com.example.douglas.dd_os_cliente.controler.ServPendenteCtrl;
 import com.example.douglas.dd_os_cliente.helper.SQLiteHandler;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -129,10 +131,16 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
             return true;
         }if (id == R.id.action_qr_code_refrigerador) {
             clickQRCode = true;
-            idQRCode = 11;
-            Toast.makeText(getApplicationContext(),"Abrir leitor de QRcode!!!",Toast.LENGTH_LONG).show();
-            Intent i = new Intent(getApplicationContext(), DetalherRefrigeActivity.class);  //your class
-            startActivity(i);
+            //Inicializando o QRcode zxing
+            IntentIntegrator integrator = new IntentIntegrator(RefrigeradorTabActivity.this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+            integrator.setPrompt("Ler um QRcode");
+            integrator.setCameraId(0);  // Use a specific camera of the device
+            integrator.setBeepEnabled(true);
+            integrator.setBarcodeImageEnabled(true);
+            integrator.initiateScan();
+
+
 
             return true;
         }
@@ -145,6 +153,30 @@ public class RefrigeradorTabActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Log.e("MainActivity", "Leitura Cancelada");
+                Toast.makeText(getApplicationContext(), "Leitura Cancelada", Toast.LENGTH_LONG).show();
+            } else {
+                Log.e("MainActivity", "Scanned "+ result.getContents());
+                Toast.makeText(getApplicationContext(), "Codigo Lido: " + result.getContents(), Toast.LENGTH_LONG).show();
+
+                idQRCode = Integer.parseInt(result.getContents());
+                Toast.makeText(getApplicationContext(),"Abrir leitor de QRcode!!!",Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getApplicationContext(), DetalherRefrigeActivity.class);  //your class
+                startActivity(i);
+            }
+        } else {
+            // This is important, otherwise the result will not be passed to the fragment
+            Log.e(TAG,"erro ----- null");
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     /**
      * A placeholder fragment containing a simple view.
